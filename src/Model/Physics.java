@@ -10,8 +10,7 @@ public class Physics {
     public static final Physics phys = new Physics();
     
     Vector<Double> calculateCollision(CueBall b1, CueBall b2) {
-        
-        
+         
         return new Vector<Double>();
         
     } 

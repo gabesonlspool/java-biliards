@@ -12,12 +12,11 @@ package Model;
 class TopBoard extends GameObject {
     
     TopBoard() {
-        super(Table.width/2, 0, true);
+        super(max_width/2, 0, true);
     }
 
-    @Override
     void update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

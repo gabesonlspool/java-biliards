@@ -12,34 +12,14 @@ package Model;
 
 public class Pocket extends GameObject {
     
-    public static final double r = 82e-2;
+    public static final double r = 82e-3;
     
     Pocket(double coord1, double coord2){
         super(coord1, coord2, true);
     }
 
     void update() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    
-    public void interact(GameObject o) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-    
-    
-    public boolean equals(GameObject o) {
-        
-        if (!(o instanceof Pocket)) return false;
-        boolean result = true && (((Pocket) o).x == x) 
-                && (((Pocket) o).y == y);
-        return result;
-        
-    }
-
-    public boolean interactionCheck(GameObject o) {
-        boolean result = false;
-        return result;
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

@@ -11,7 +11,7 @@ package Model;
  */
 public class Cue extends GameObject {
     
-    Cue(int coord1, int coord2) {
+    Cue(double coord1, double coord2) {
         super(coord1, coord2, false);
     }
    

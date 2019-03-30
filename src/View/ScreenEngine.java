@@ -3,20 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package View;
 
 /**
  *
  * @author andrey
  */
-public class LeftBoard extends GameObject {
-    
-    LeftBoard() {
-        super(0, max_height/2, true);
-    }
-
-    void update() {
-        
-    }
+public class ScreenEngine {
     
 }

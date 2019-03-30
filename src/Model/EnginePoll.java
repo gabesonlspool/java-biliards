@@ -28,7 +28,9 @@ public class EnginePoll extends TimerTask{
     public void run() {
         
         for (CueBall b: balls) {
+            
             for (CueBall b2: balls) {
+                 if (b.interactionCheck(b2)) System.out.println(b2.number);
                 if (b.interactionCheck(b2)) b.interact(b2);
             }
             
@@ -40,6 +42,7 @@ public class EnginePoll extends TimerTask{
             if (b.interactionCheck(t.tb)) b.interact(t.tb);
             if (b.interactionCheck(t.lb)) b.interact(t.lb);
             if (b.interactionCheck(t.rb)) b.interact(t.rb);
+            
             b.update();
         }
         

@@ -12,12 +12,11 @@ package Model;
 class RightBoard extends GameObject {
     
     RightBoard() {
-        super(Table.width, Table.height/2, true);
+        super(max_width, max_width/2, true);
     }
 
-    @Override
     void update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

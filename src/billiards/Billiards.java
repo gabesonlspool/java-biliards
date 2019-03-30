@@ -3,20 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package billiards;
 
 /**
  *
  * @author andrey
  */
-public class LeftBoard extends GameObject {
-    
-    LeftBoard() {
-        super(0, max_height/2, true);
-    }
+public class Billiards {
 
-    void update() {
-        
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
     }
     
 }

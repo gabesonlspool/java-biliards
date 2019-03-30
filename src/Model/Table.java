@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Model;
+import View.TableDrawer;
 import java.util.ArrayList;
 
 /**
@@ -17,17 +18,17 @@ public class Table extends GameObject {
     RightBoard rb; //Right border
     TopBoard tb; // Top border
     BottomBoard bb; // Bottom border
-    protected static final double width = 2.54;
-    protected static double height = 1.27;
+    TableDrawer drawer;
     
     Table() {
         super(0, 0, true);
+        pocket_list = new ArrayList<Pocket>();
         pocket_list.add(new Pocket(Pocket.r, Pocket.r));
-        pocket_list.add(new Pocket(width/2, Pocket.r));
-        pocket_list.add(new Pocket(width - Pocket.r, Pocket.r));
-        pocket_list.add(new Pocket(Pocket.r, height - Pocket.r));
-        pocket_list.add(new Pocket(width/2, height - Pocket.r));
-        pocket_list.add(new Pocket(width - Pocket.r, height - Pocket.r));
+        pocket_list.add(new Pocket(max_width/2, Pocket.r));
+        pocket_list.add(new Pocket(max_width - Pocket.r, Pocket.r));
+        pocket_list.add(new Pocket(Pocket.r, max_height - Pocket.r));
+        pocket_list.add(new Pocket(max_width/2, max_height - Pocket.r));
+        pocket_list.add(new Pocket(max_width - Pocket.r, max_height - Pocket.r));
         lb = new LeftBoard();
         rb = new RightBoard();
         tb = new TopBoard();
@@ -44,6 +45,7 @@ public class Table extends GameObject {
         bb.update();
         lb.update();
         rb.update();
+        drawer.draw();
      
     }
     

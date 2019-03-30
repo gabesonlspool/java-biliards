@@ -12,12 +12,11 @@ package Model;
 class BottomBoard extends GameObject {
     
     BottomBoard() {
-        super(Table.width/2, Table.height, true);
+        super(max_width/2, max_height, true);
     }
     
     void update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
 }
