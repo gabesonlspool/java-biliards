@@ -17,7 +17,7 @@ public class GameEngine {
     private Timer timer;
      //tick - интервал времени в секундах, через который обновляется движок
     protected static final double tick = 0.05;
-    //poll - список объектов движка, унаследованный от TimerTask
+    //poll - список объектов движка, унаследованный от TimerTask, c переопределенным методом run;
     private EnginePoll poll;
     // Логично сделать движок singleton-ом
     public static final GameEngine Engine = new GameEngine();   
@@ -47,7 +47,16 @@ public class GameEngine {
      
     
     public static void main(String[] args) {
-        
+        GameEngine engine = new GameEngine();
+        engine.AddBall(new CueBall(1.0, 1.0, 0));
+        engine.AddBall(new CueBall(2.0, 1.0, 0));
+        System.out.println(CueBall.count);
+        engine.run();
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
 }
