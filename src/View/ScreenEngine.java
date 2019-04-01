@@ -22,14 +22,12 @@ public class ScreenEngine extends Canvas {
     protected static int CANVAS_HEIGHT;
     ArrayList<CueBallDrawer> ball_drawers;
     TableDrawer table_drawer;
-    Graphics g;
     
-    ScreenEngine(GameEngine e, int w, int h, Graphics grphx) {
+    ScreenEngine(GameEngine e, int w, int h) {
         CANVAS_HEIGHT = h;
         CANVAS_WIDTH = w;
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         ball_drawers = new ArrayList<>();
-        g = grphx;
         System.out.println();
         
         ArrayList<CueBall> balls = e.getCueBallList();
@@ -43,10 +41,9 @@ public class ScreenEngine extends Canvas {
         table_drawer = new TableDrawer(w, h);
         t.addDrawer(table_drawer);
         
-        paint();
     }
     
-    public void paint() {
+    public void paint(Graphics g) {
         table_drawer.draw(g);
         for (CueBallDrawer d: ball_drawers) {
             d.draw(g);

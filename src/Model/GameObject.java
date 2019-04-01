@@ -5,11 +5,6 @@
  */
 
 package Model;
-import javax.imageio.*;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 
 /**
@@ -18,13 +13,11 @@ import java.net.URISyntaxException;
  */
 abstract public class GameObject {
     
-    protected static final double max_width = 2.54;
-    protected static final double max_height = 1.27;
+    public static final double max_width = 2.54;
+    public static final double max_height = 1.27;
     
-    
-    protected double x;
-    protected double y;
-    Image sprite = null;
+    public double x;
+    public double y;
     
     /* Интерактивные объекты могут взаимодействовать во время итераций движка
      * с другими интерактивными объектами */

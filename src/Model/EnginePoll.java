@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Model;
+import View.ScreenEngine;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -13,8 +14,9 @@ import java.util.TimerTask;
  */
 public class EnginePoll extends TimerTask{
     
-    Table t;
-    ArrayList<CueBall> balls; 
+    private Table t;
+    private ArrayList<CueBall> balls; 
+    private ScreenEngine screng;
     
     EnginePoll() {
         t = new Table();
@@ -24,13 +26,12 @@ public class EnginePoll extends TimerTask{
     protected void AddBall(CueBall obj) {
         balls.add(obj);
     }
-
+    
     public void run() {
         
         for (CueBall b: balls) {
             
             for (CueBall b2: balls) {
-                 if (b.interactionCheck(b2)) System.out.println(b2.number);
                 if (b.interactionCheck(b2)) b.interact(b2);
             }
             
@@ -47,6 +48,20 @@ public class EnginePoll extends TimerTask{
         }
         
         t.update();
+        screng.update();
+        
+    }
+    
+    public ArrayList<CueBall> getCueBallList() {
+        return balls;
+    }
+    
+    public Table getTable() {
+        return t;
+    }
+    
+    public void AddScreenEngine(ScreenEngine e) {
+        screng = e;
     }
     
 }

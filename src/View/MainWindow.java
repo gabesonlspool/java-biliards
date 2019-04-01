@@ -20,7 +20,6 @@ public class MainWindow {
     public static void main(String[] args){
         
         Frame window = new Frame("Billiard");
-        window.setVisible(true);
         window.setLayout(null);
         window.setIgnoreRepaint(true);
         
@@ -39,30 +38,27 @@ public class MainWindow {
         window.add(m);
         
         GameEngine e = new GameEngine();
-        e.AddBall(new CueBall(1, 1));
+        CueBall b = new CueBall(1, 1);
+        b.setVelocity(0.1, -0.1);
+        e.AddBall(b);
         e.AddBall(new CueBall(2, 1));
         ScreenEngine s = new ScreenEngine(
             e, scrsz.width * 3/4,
-            scrsz.height * 3/4,
-            window.getGraphics().create(
-                0, 0,
-                scrsz.width * 3/4,
-                scrsz.height * 3/4)
+            scrsz.height * 3/4
         );
         e.AddScreenEngine(s);
         s.setLocation(0, 40);
         window.add(s);
         window.paint(window.getGraphics());
-        s.repaint();
         
-        /*e.run();
+        window.setVisible(true);
+        
+        e.run();
         try {
             Thread.sleep(20000);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
-        }*/
-        
-        
+        }
         
     }
 }

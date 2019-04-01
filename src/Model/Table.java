@@ -45,8 +45,11 @@ public class Table extends GameObject {
         bb.update();
         lb.update();
         rb.update();
-        drawer.draw();
-     
+        //drawer.draw();
+    }
+    
+    public void addDrawer(TableDrawer d) {
+        drawer = d;
     }
     
 }

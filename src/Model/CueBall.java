@@ -25,18 +25,16 @@ public class CueBall extends GameObject {
     private double[] V;
     private double[] A;
 
-    CueBall(double coord1, double coord2) {
-        super(coord1, coord2,
-              true);
+    public CueBall(double coord1, double coord2) {
+        super(coord1, coord2, true);
                 
-        
         number = count;
         V = new double[2];
         A = new double[2];
         count++;
         
     }
-    
+        
     protected void Move() {
         double t = GameEngine.tick;
         x += V[0] * t  + A[0] / 2 * Math.pow(t, 2);
@@ -44,24 +42,25 @@ public class CueBall extends GameObject {
         
     }
     
-    private void SetVelocity(double U_x, double U_y ) {
+    public void setVelocity(double U_x, double U_y ) {
         V[0] = U_x;
         V[1] = U_y;
     }
     
-    private void SetAcceleration(double[] U) {
+    private void setAcceleration(double[] U) {
        A[0] = U[0];
        A[1] = U[1];
     }
    
     
     public void update() {
-        drawer.draw();
+        this.Move();
+        drawer.update(x, y);
     }
     
     
     public void interact(GameObject o) {
-        
+                
         if (o instanceof CueBall) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -71,19 +70,19 @@ public class CueBall extends GameObject {
         }
         
         if (o instanceof TopBoard) {
-            this.SetVelocity(V[0], -V[1]);
+            this.setVelocity(V[0], -V[1]);
         }
         
         if (o instanceof BottomBoard) {
-            this.SetVelocity(V[0], -V[1]);
+            this.setVelocity(V[0], -V[1]);
         }
         
         if (o instanceof LeftBoard) {
-            this.SetVelocity(-V[0], V[1]);
+            this.setVelocity(-V[0], V[1]);
         }
         
-        if (o instanceof LeftBoard) {
-            this.SetVelocity(-V[0], V[1]);
+        if (o instanceof RightBoard) {
+            this.setVelocity(-V[0], V[1]);
         }
     }
     
@@ -97,7 +96,7 @@ public class CueBall extends GameObject {
     
     public boolean interactionCheck(GameObject o) {
         
-        if (!o.interactive || this.equals(o)) return false;
+        if (this.equals(o)) return false;
         
         if (o instanceof CueBall) {
             if (Math.hypot(this.x - o.x, this.y - o.y) <= CueBall.r)
@@ -112,22 +111,22 @@ public class CueBall extends GameObject {
         }
         
         if (o instanceof BottomBoard) {
-            if (Math.abs(o.y - max_height) <= CueBall.r)
+            if (Math.abs(y - max_height) <= CueBall.r)
                 return true;
         }
         
         if (o instanceof TopBoard) {
-            if (o.y <= CueBall.r)
+            if (y <= CueBall.r)
                 return true;
         }
         
         if (o instanceof LeftBoard) {
-            if (o.x <= CueBall.r)
+            if (x <= CueBall.r)
                 return true;
         }
         
-        if (o instanceof LeftBoard) {
-            if (Math.abs(o.y - max_width) <= CueBall.r)
+        if (o instanceof RightBoard) {
+            if (Math.abs(x - max_width) <= CueBall.r)
                 return true;
         }
         
@@ -135,7 +134,7 @@ public class CueBall extends GameObject {
         
     }
 
-    void add_drawer(CueBallDrawer d) {
+    public void addDrawer(CueBallDrawer d) {
         drawer = d;
     }
     
