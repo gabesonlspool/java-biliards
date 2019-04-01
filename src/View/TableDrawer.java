@@ -4,21 +4,36 @@
  * and open the template in the editor.
  */
 package View;
-
-import java.awt.Image;
+import View.GameObjectDrawer;
+import java.awt.Graphics;
+import java.io.IOException;
 
 /**
  *
  * @author andrey
  */
 public class TableDrawer extends GameObjectDrawer {
-
-    public TableDrawer() {
+    
+    private static int w;
+    private static int h;
+       
+    public TableDrawer(int width, int height) {
         super("Sprite/Table.jpeg");
-    }
-
-    public void draw() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        w = width;
+        h = height;
     }
     
+    public void draw(Graphics g) {
+        try {
+            boolean result = g.drawImage(sprite, x, y, w, h, null);
+            if (!result) throw new IOException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }        
+    }
+
+    @Override
+    public void update(double x, double y) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

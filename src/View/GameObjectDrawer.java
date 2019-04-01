@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 package View;
-import java.awt.Image;
+import Model.GameObject;
+import java.awt.Graphics;
 import javax.imageio.*;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 
 /**
  *
@@ -18,6 +20,8 @@ import java.net.URISyntaxException;
 abstract class GameObjectDrawer {
     
     Image sprite;
+    protected int x = 0;
+    protected int y = 0;
     
     GameObjectDrawer(String path_to_sprite) {
         if (path_to_sprite != null) {
@@ -31,6 +35,13 @@ abstract class GameObjectDrawer {
         }
     }
     
-    abstract void draw();
+    void setCoords(int coord1, int coord2) {
+        x = coord1;
+        y = coord2;
+    }
+    
+    abstract protected void draw(Graphics g);
+   
+    abstract public void update(double x, double y);     
     
 }

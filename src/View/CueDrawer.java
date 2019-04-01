@@ -5,6 +5,8 @@
  */
 package View;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 
 /**
@@ -15,10 +17,15 @@ public class CueDrawer extends GameObjectDrawer {
 
     public CueDrawer() {
         super("/Sprite/Cue.jpeg");
-    }
+    }    
 
-    void draw() {
+    @Override
+    public void update(double x, double y) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    protected void draw(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
