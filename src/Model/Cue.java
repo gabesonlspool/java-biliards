@@ -12,10 +12,15 @@ package Model;
 public class Cue extends GameObject {
     
     Cue(double coord1, double coord2) {
-        super(coord1, coord2, false);
+        super(coord1, coord2);
     }
    
     
     public void update() {}
+
+    @Override
+    boolean interactionCheck(CueBall b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

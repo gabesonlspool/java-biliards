@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Model;
-import View.TableDrawer;
+import View.TableGraphicProperties;
 import java.util.ArrayList;
 
 /**
@@ -18,38 +18,30 @@ public class Table extends GameObject {
     RightBoard rb; //Right border
     TopBoard tb; // Top border
     BottomBoard bb; // Bottom border
-    TableDrawer drawer;
+    TableGraphicProperties drawer;
     
     Table() {
-        super(0, 0, true);
+        super(0, 0);
         pocket_list = new ArrayList<Pocket>();
-        pocket_list.add(new Pocket(Pocket.r, Pocket.r));
-        pocket_list.add(new Pocket(max_width/2, Pocket.r));
-        pocket_list.add(new Pocket(max_width - Pocket.r, Pocket.r));
-        pocket_list.add(new Pocket(Pocket.r, max_height - Pocket.r));
-        pocket_list.add(new Pocket(max_width/2, max_height - Pocket.r));
-        pocket_list.add(new Pocket(max_width - Pocket.r, max_height - Pocket.r));
+        pocket_list.add(new Pocket(0, 0));
+        pocket_list.add(new Pocket(max_width/2, 0));
+        pocket_list.add(new Pocket(max_width, 0));
+        pocket_list.add(new Pocket(0, max_height));
+        pocket_list.add(new Pocket(max_width/2, max_height));
+        pocket_list.add(new Pocket(max_width, max_height));
         lb = new LeftBoard();
         rb = new RightBoard();
         tb = new TopBoard();
         bb = new BottomBoard();
     }
-
-    void update() {
-        
-        pocket_list.forEach((p) -> {
-            p.update();
-        });
-           
-        bb.update();
-        bb.update();
-        lb.update();
-        rb.update();
-        //drawer.draw();
-    }
-    
-    public void addDrawer(TableDrawer d) {
+   
+    public void addGraphicProperties(TableGraphicProperties d) {
         drawer = d;
+    }
+
+    @Override
+    boolean interactionCheck(CueBall b) {
+        return false;
     }
     
 }

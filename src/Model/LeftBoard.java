@@ -12,11 +12,15 @@ package Model;
 public class LeftBoard extends GameObject {
     
     LeftBoard() {
-        super(0, max_height/2, true);
-    }
-
-    void update() {
-        
-    }
+        super(0, max_height/2);
+    }  
     
+    @Override
+    boolean interactionCheck(CueBall b) {
+        if (b.x <= CueBall.r) {
+            return true;
+        }
+        return false;
+    }
+      
 }

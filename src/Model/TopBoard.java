@@ -12,11 +12,15 @@ package Model;
 class TopBoard extends GameObject {
     
     TopBoard() {
-        super(max_width/2, 0, true);
+        super(max_width/2, 0);
     }
 
-    void update() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    boolean interactionCheck(CueBall b) {
+        if (b.y <= CueBall.r) {
+            return true;
+        }
+        return false;
     }
-    
+
 }

@@ -12,11 +12,14 @@ package Model;
 class RightBoard extends GameObject {
     
     RightBoard() {
-        super(max_width, max_width/2, true);
+        super(max_width, max_width/2);
     }
 
-    void update() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    @Override
+    boolean interactionCheck(CueBall b) {
+        if (Math.abs(b.x - max_width) <= CueBall.r) {
+            return true;
+        }
+        return false;
+    }  
 }

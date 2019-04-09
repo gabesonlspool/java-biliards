@@ -15,46 +15,97 @@ import java.util.Timer;
 
 public class GameEngine {
     
-    public boolean is_working;
-    private Timer timer;
+    public static boolean is_working;
+    private static Timer timer;
      //tick - интервал времени в секундах, через который обновляется движок
     protected static final double tick = 0.001;
-    //poll - список объектов движка, унаследованный от TimerTask, c переопределенным методом run;
-    private EnginePoll poll;
     // Логично сделать движок singleton-ом
+    private static Table t; // Стол
+    private static ArrayList<CueBall> balls;
+    private static MasterBall master = new MasterBall(0.5, 0.5);// Список шаров на столе
+    private static ScreenEngine screng; // Отрисовщик игорового поля
     public static final GameEngine Engine = new GameEngine();   
     
     public GameEngine() {
         is_working = false;
-        timer = new Timer(true);
-        poll = new EnginePoll();
+        balls = new ArrayList<>();
+        t = new Table();
     }
       
-    public void run() {
+    public static void run() {
+       
         is_working = true;
-        timer.schedule(poll, 0, Math.round(tick * 1000));
+        boolean stop = false;
+        
+        while (true) {
+            
+            for (CueBall b: balls) {
+                if (master.interactionCheck(b)) master.interact(b);
+                
+                for (CueBall b2: balls) {
+                    if (!b.equals(b2)) {
+                        if (b2.interactionCheck(b)) b.interact(b2);
+                    }
+                }
+            
+                for (Pocket p: t.pocket_list) {
+                    if (p.interactionCheck(b)) b.interact(p);
+                }
+            
+                if (t.bb.interactionCheck(b)) b.interact(t.bb);
+                if (t.tb.interactionCheck(b)) b.interact(t.tb);
+                if (t.lb.interactionCheck(b)) b.interact(t.lb);
+                if (t.rb.interactionCheck(b)) b.interact(t.rb);
+            
+                boolean tmp = b.update();
+                stop = tmp || stop;
+                
+            }
+            
+            if (t.bb.interactionCheck(master)) master.interact(t.bb);
+            if (t.tb.interactionCheck(master)) master.interact(t.tb);
+            if (t.lb.interactionCheck(master)) master.interact(t.lb);
+            if (t.rb.interactionCheck(master)) master.interact(t.rb);
+            
+            screng.update();
+            boolean tmp = master.update();
+            stop = tmp || stop;
+            
+            if (!stop) break;
+            stop = false;
+            
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
-    public void pause() {
+    public static void pause() {
         is_working = false;
-        timer.cancel();
     }
      
     
     public void AddBall(CueBall b) {
-        poll.AddBall(b);
+        balls.add(b);
     }
-                
+                    
     public ArrayList<CueBall> getCueBallList() {
-        return poll.getCueBallList();
+        return balls;
     }
     
     public Table getTable() {
-        return poll.getTable();
+        return t;
     }
     
     public void AddScreenEngine(ScreenEngine e) {
-        poll.AddScreenEngine(e);
+        screng = e;
     }
+
+    public MasterBall getMasterBall() {
+        return master;
+    }
+    
     
 }

@@ -6,35 +6,45 @@
 package Controller;
 
 
+import View.GameButton;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import Model.GameEngine;
 
 public class MouseButtonClickHandler implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GameButton btn = (GameButton) me.getSource();
+        if (GameEngine.is_working) {
+            GameEngine.pause();
+        } else {
+            GameEngine.run();
+        }
+        
+        btn.repaint();
     }
 
     @Override
     public void mousePressed(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        if (GameEngine.is_working) {
+            GameEngine.pause();
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!GameEngine.is_working) {
+            GameEngine.run();
+        }
     }
 
     @Override
-    public void mouseEntered(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void mouseEntered(MouseEvent me) {}
 
     @Override
-    public void mouseExited(MouseEvent me) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void mouseExited(MouseEvent me) {} 
     
 }
 
