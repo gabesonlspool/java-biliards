@@ -35,13 +35,9 @@ public class ScreenEngine extends Canvas {
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
           
         MasterBall mb = e.getMasterBall();
-        masterprop = new MasterBallGraphicProperties(
-                mb,
-                new MasterBallMouseHandler()
-        );
+        masterprop = new MasterBallGraphicProperties(mb);
         mb.addGraphicProperties(masterprop);
-        System.out.println(masterprop.getMouseListeners());
-        
+               
         ballprop = new ArrayList<>(); 
         ArrayList<CueBall> balls = e.getCueBallList();
         for (CueBall b: balls) {
@@ -56,7 +52,7 @@ public class ScreenEngine extends Canvas {
         
     }
     
-    public void paintComponent(Graphics g) {
+    public void paintComponent() {
         
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
@@ -64,30 +60,15 @@ public class ScreenEngine extends Canvas {
             return;
         }
         Graphics bar = bs.getDrawGraphics();
-        bar.drawImage(
-                tableprop.sprite, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, null
-        );
+        tableprop.paintComponent(bar);
         bar.dispose();
         
         bar = bs.getDrawGraphics();
-        bar.setClip(new Ellipse2D.Float(
-                masterprop.x,
-                masterprop.y,
-                masterprop.r,
-                masterprop.r
-        ));
-        bar.drawImage(
-                masterprop.sprite,
-                masterprop.x,
-                masterprop.y,
-                masterprop.r,
-                masterprop.r, null
-        );
+        masterprop.paintComponent(bar);
         bar.dispose();
         for (CueBallGraphicProperties d: ballprop) {
             bar = bs.getDrawGraphics();
-            bar.setClip(new Ellipse2D.Float(d.x, d.y, d.r, d.r));
-            bar.drawImage(d.sprite, d.x, d.y, d.r, d.r, null);
+            d.paintComponent(bar);
             bar.dispose();
         }
                 
@@ -95,8 +76,7 @@ public class ScreenEngine extends Canvas {
     }
     
     public void update() {
-        Graphics g = this.getGraphics();
-        this.paintComponent(g);
+        this.paintComponent();
     }
         
 }
