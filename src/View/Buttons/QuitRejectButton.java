@@ -19,7 +19,7 @@ public class QuitRejectButton extends GameButton {
     }
     
     public void update() {
-        this.getParent().setVisible(false);
+        this.getParent().setVisible(false);        
     }
     
 }

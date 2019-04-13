@@ -22,5 +22,10 @@ public class LeftBoard extends GameObject {
         }
         return false;
     }
+
+    @Override
+    void interact(CueBall b) {
+        b.setVelocity(-b.V[0], b.V[1]);
+    }
       
 }

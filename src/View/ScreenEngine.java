@@ -5,14 +5,15 @@
  */
 package View;
 
-import Controller.MasterBallMouseHandler;
+import Controller.CueMouseListener;
+import Model.Cue;
 import Model.CueBall;
 import Model.GameEngine;
+import static Model.GameEngine.ENGINE;
 import Model.MasterBall;
 import Model.Table;
 import java.awt.Canvas;
 import java.awt.Graphics;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -22,61 +23,87 @@ import java.util.ArrayList;
  */
 public class ScreenEngine extends Canvas {
     
+    private ArrayList<CueBallDrawer> balldrawers;
+    protected MasterBallDrawer masterdrawer;
+    private TableDrawer tabledrawer;
+    private CueDrawer cuedrawer;
+    
     protected static int CANVAS_WIDTH;
     protected static int CANVAS_HEIGHT;
-    ArrayList<CueBallGraphicProperties> ballprop;
-    MasterBallGraphicProperties masterprop;
-    TableGraphicProperties tableprop;
+   
     
     ScreenEngine(GameEngine e, int w, int h) {
         
         CANVAS_HEIGHT = h;
         CANVAS_WIDTH = w;
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-          
+        addMouseMotionListener(new CueMouseListener());
+        
         MasterBall mb = e.getMasterBall();
-        masterprop = new MasterBallGraphicProperties(mb);
-        mb.addGraphicProperties(masterprop);
-               
-        ballprop = new ArrayList<>(); 
+        masterdrawer = new MasterBallDrawer(mb);
+        mb.addDrawer(masterdrawer);
+        
+        cuedrawer = new CueDrawer();
+        Cue cue = e.getCue();
+        cue.addDrawer(cuedrawer);
+        
+        balldrawers = new ArrayList<>(); 
         ArrayList<CueBall> balls = e.getCueBallList();
         for (CueBall b: balls) {
-            CueBallGraphicProperties d = new CueBallGraphicProperties(b);
-            ballprop.add(d);
-            b.addGraphicProperties(d);                   
+            CueBallDrawer d = new CueBallDrawer(b);
+            balldrawers.add(d);
+            b.addDrawer(d);                   
         }
         
-        Table t = e.getTable();
-        tableprop = new TableGraphicProperties(w, h);
-        t.addGraphicProperties(tableprop);
-        
+        tabledrawer = new TableDrawer(w, h);
+        Table.addDrawer(tabledrawer);
+                                      
     }
     
-    public void paintComponent() {
+    public CueDrawer getCueDrawer() {
+        return cuedrawer;
+    }
+    
+    
+    @Override
+    public void paint(Graphics g) {
         
+        tabledrawer.draw(g);
+        masterdrawer.draw(g);
+        for (CueBallDrawer d: balldrawers) {
+            d.draw(g);
+        }
+        cuedrawer.draw(g);
+        
+    }
+              
+    public void update() {
+               
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(2);
             return;
         }
+        
         Graphics bar = bs.getDrawGraphics();
-        tableprop.paintComponent(bar);
+        tabledrawer.draw(bar);
         bar.dispose();
         
-        bar = bs.getDrawGraphics();
-        masterprop.paintComponent(bar);
-        bar.dispose();
-        for (CueBallGraphicProperties d: ballprop) {
+        if (ENGINE.state == ENGINE.AIMING) {
             bar = bs.getDrawGraphics();
-            d.paintComponent(bar);
+            cuedrawer.draw(bar);
             bar.dispose();
         }
-                
-        bs.show();
-    }
-    
-    public void update() {
-        this.paintComponent();
-    }
         
+        bar = bs.getDrawGraphics();
+        masterdrawer.draw(bar);
+        bar.dispose();
+        for (CueBallDrawer d: balldrawers) {
+            bar = bs.getDrawGraphics();
+            d.draw(bar);
+            bar.dispose();
+        }
+        bs.show();
+        
+    }
 }

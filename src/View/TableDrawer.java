@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package View;
-import View.GameObjectDrawer;
+import Model.Table;
 import java.awt.Graphics;
 import java.io.IOException;
 
@@ -19,21 +19,21 @@ public class TableDrawer extends GameObjectDrawer {
        
     public TableDrawer(int width, int height) {
         super("Sprite/Table.jpeg");
+        Table.addDrawer(this);
         w = width;
         h = height;
     }
     
-    public void draw(Graphics g) {
-        try {
-            boolean result = g.drawImage(sprite, x, y, w, h, null);
-            if (!result) throw new IOException();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }        
-    }
-
     @Override
     public void update(double x, double y) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    protected void draw(Graphics g) {
+        g.drawImage(
+                sprite, 0,
+                0, ScreenEngine.CANVAS_WIDTH,
+                ScreenEngine.CANVAS_HEIGHT, null
+        );
     }
 }

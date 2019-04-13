@@ -5,7 +5,7 @@
  */
 package Model;
 
-import View.MasterBallGraphicProperties;
+import View.MasterBallDrawer;
 
 /**
  *
@@ -13,13 +13,13 @@ import View.MasterBallGraphicProperties;
  */
 public class MasterBall extends CueBall {
     
-    private MasterBallGraphicProperties gprop;
+    private MasterBallDrawer gprop;
     
     public MasterBall(double coord1, double coord2) {
         super(coord1, coord2);
     }
     
-    public void addGraphicProperties(MasterBallGraphicProperties d) {
+    public void addDrawer(MasterBallDrawer d) {
         gprop = d;
     }
     

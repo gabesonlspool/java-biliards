@@ -5,21 +5,37 @@
  */
 package Model;
 
+
+import View.CueDrawer;
+
 /**
  *
  * @author andrey
  */
 public class Cue extends GameObject {
     
-    Cue(double coord1, double coord2) {
-        super(coord1, coord2);
+    private CueDrawer drawer;
+    
+    Cue() {
+        super(0, 0);
     }
    
     
-    public void update() {}
+    public void update() {
+        drawer.update();
+    }
+    
+    public void addDrawer(CueDrawer d) {
+        drawer = d;
+    }
 
     @Override
     boolean interactionCheck(CueBall b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    void interact(CueBall b) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -19,6 +19,7 @@ public class StartGameButton extends GameButton {
     }
    
     public void update() {
+        GameEngine.switchState();
         GameEngine.run();
     }
     

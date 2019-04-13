@@ -6,7 +6,6 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
-import Controller.WindowCloseHandler;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;

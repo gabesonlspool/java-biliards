@@ -9,12 +9,14 @@ package View;
  *
  * @author andrey
  */
+
 import Controller.WindowCloseHandler;
 import Model.CueBall;
 import Model.GameEngine;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
+
 
 public class MainWindow {
     public static void main(String[] args){
@@ -24,7 +26,7 @@ public class MainWindow {
         
         Dimension scrsz = Toolkit.getDefaultToolkit().getScreenSize();
         window.setSize(scrsz);
-        
+            
         WindowCloseHandler w = new WindowCloseHandler();
         window.addWindowListener(w);
               
@@ -35,9 +37,12 @@ public class MainWindow {
             scrsz.height
         );
         window.add(m);
-        
+                
         GameEngine e = new GameEngine();
-        
+        CueBall b = new CueBall(1, 1);
+        b.setVelocity(2.5, 0.9);
+        e.AddBall(b);
+        e.AddBall(new CueBall(1.5, 0.5));
         ScreenEngine s = new ScreenEngine(
             e, scrsz.width * 3/4,
             scrsz.height * 3/4
@@ -46,8 +51,9 @@ public class MainWindow {
         s.setLocation(0, 40);
         window.add(s);
         
-        window.setVisible(true);
-        
+        window.setFocusable(true);
+        window.setVisible(true);       
+
     }
 }
 

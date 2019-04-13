@@ -30,5 +30,6 @@ abstract public class GameObject {
     }
     
     abstract boolean interactionCheck(CueBall b);
+    abstract void interact(CueBall b);
         
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Model;
-import View.TableGraphicProperties;
+import View.TableDrawer;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +18,7 @@ public class Table extends GameObject {
     RightBoard rb; //Right border
     TopBoard tb; // Top border
     BottomBoard bb; // Bottom border
-    TableGraphicProperties drawer;
+    static TableDrawer drawer;
     
     Table() {
         super(0, 0);
@@ -35,13 +35,18 @@ public class Table extends GameObject {
         bb = new BottomBoard();
     }
    
-    public void addGraphicProperties(TableGraphicProperties d) {
+    public static void addDrawer(TableDrawer d) {
         drawer = d;
     }
 
     @Override
     boolean interactionCheck(CueBall b) {
         return false;
+    }
+
+    @Override
+    void interact(CueBall b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

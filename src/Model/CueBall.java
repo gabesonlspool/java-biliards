@@ -5,7 +5,7 @@
  */
 package Model;
 
-import View.CueBallGraphicProperties;
+import View.CueBallDrawer;
 
 
 public class CueBall extends GameObject {
@@ -18,7 +18,7 @@ public class CueBall extends GameObject {
     // Номер шара
     public int number = 0;
     // Графические свойства шара
-    private CueBallGraphicProperties gprop;
+    private CueBallDrawer gprop;
     protected double[] V;
     protected double[] A;
 
@@ -72,35 +72,7 @@ public class CueBall extends GameObject {
         gprop.update(x, y);
         return result;
     }
-    
-    
-    public void interact(GameObject o) {
-                
-        if (o instanceof CueBall) {
-            Physics.calculateCollision(this, (CueBall) o);
-        }
-        
-        if (o instanceof Pocket) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        if (o instanceof TopBoard) {
-            this.setVelocity(V[0], -V[1]);
-        }
-        
-        if (o instanceof BottomBoard) {
-            this.setVelocity(V[0], -V[1]);
-        }
-        
-        if (o instanceof LeftBoard) {
-           this.setVelocity(-V[0], V[1]);
-        }
-        
-        if (o instanceof RightBoard) {
-            this.setVelocity(-V[0], V[1]);
-        }
-    }
-    
+       
     public boolean equals(GameObject o) {
         
         if (!(o instanceof CueBall)) return false;
@@ -108,7 +80,7 @@ public class CueBall extends GameObject {
         
     }
     
-    public void addGraphicProperties(CueBallGraphicProperties d) {
+    public void addDrawer(CueBallDrawer d) {
         gprop = d;
     }
     
@@ -120,6 +92,11 @@ public class CueBall extends GameObject {
         return false;
     }
     
+    
+    @Override
+    void interact(CueBall b) {
+        Physics.calculateCollision(b, this);
+    }
     
     
 }

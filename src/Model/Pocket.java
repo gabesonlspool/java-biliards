@@ -29,5 +29,9 @@ public class Pocket extends GameObject {
         }
         return false;
     }
-    
+
+    @Override
+    void interact(CueBall b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }   
 }

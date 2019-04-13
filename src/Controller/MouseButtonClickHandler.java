@@ -6,45 +6,16 @@
 package Controller;
 
 
-import View.GameButton;
+import View.Buttons.GameButton;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import Model.GameEngine;
+import java.awt.event.MouseAdapter;
 
-public class MouseButtonClickHandler implements MouseListener {
+public class MouseButtonClickHandler extends MouseAdapter {
 
-    @Override
     public void mouseClicked(MouseEvent me) {
-        GameButton btn = (GameButton) me.getSource();
-        if (GameEngine.is_working) {
-            GameEngine.pause();
-        } else {
-            GameEngine.run();
-        }
-        
-        btn.repaint();
+        GameButton btn =(GameButton) me.getSource();       
+        btn.update();
     }
-
-    @Override
-    public void mousePressed(MouseEvent me) {
-        
-        if (GameEngine.is_working) {
-            GameEngine.pause();
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent me) {
-        if (!GameEngine.is_working) {
-            GameEngine.run();
-        }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent me) {}
-
-    @Override
-    public void mouseExited(MouseEvent me) {} 
     
 }
 
