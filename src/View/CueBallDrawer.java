@@ -13,12 +13,17 @@ import java.awt.geom.Ellipse2D;
 
 public class CueBallDrawer extends GameObjectDrawer {
     
-    protected static int r = 
-            (int) Math.round(GameObjectDrawer.FIELD_WIDTH * 0.0448) / 2;
+    private boolean active;
     
+    protected static final int r = 
+            (int) Math.round((double) TableDrawer.TABLE_WIDTH *
+                    CueBall.r / GameObject.max_width);
+        
     public CueBallDrawer(CueBall ball) {
         super("Sprite/Ball" + Integer.toString(ball.number) + ".jpeg");
         ball.addDrawer(this);
+        active = true;
+        
         int[] tmp = this.calculatePos(ball.x, ball.y);
         x = tmp[0];
         y = tmp[1];
@@ -26,29 +31,22 @@ public class CueBallDrawer extends GameObjectDrawer {
        
     private int[] calculatePos(double x, double y) {
         int[] result = new int[2];
-        int offset_w = (
-                ScreenEngine.CANVAS_WIDTH - 
-                GameObjectDrawer.FIELD_WIDTH
-        )/2;
-        int offset_h = (
-                ScreenEngine.CANVAS_HEIGHT - 
-                GameObjectDrawer.FIELD_HEIGHT
-        )/2;
-        result[0] = offset_w - r +
-                (int) Math.round(GameObjectDrawer.FIELD_WIDTH * x /
-                GameObject.max_width
-        );
-        result[1] = offset_h - r + 
-                (int) Math.round(GameObjectDrawer.FIELD_HEIGHT * y / 
-                GameObject.max_height
-        );
+                
+        result[0] =  TableDrawer.offset_x + 
+                (int) Math.round(TableDrawer.TABLE_WIDTH * x /
+                    GameObject.max_width
+                ) - r;
+        result[1] = TableDrawer.offset_y + 
+                (int) Math.round(TableDrawer.TABLE_HEIGHT * y / 
+                    GameObject.max_height 
+                ) - r;
+        
         return result;   
     }
 
     @Override
     public void update(double x, double y) {
-        int [] pos = new int[2];
-        pos = calculatePos(x, y);
+        int [] pos = calculatePos(x, y);
         this.setCoords(pos[0], pos[1]);
     }
     

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Table extends GameObject {
     
-    ArrayList<Pocket> pocket_list;
+    public static ArrayList<Pocket> pocket_list;
     LeftBoard lb; //Left border
     RightBoard rb; //Right border
     TopBoard tb; // Top border
@@ -22,13 +22,13 @@ public class Table extends GameObject {
     
     Table() {
         super(0, 0);
-        pocket_list = new ArrayList<Pocket>();
-        pocket_list.add(new Pocket(0, 0));
-        pocket_list.add(new Pocket(max_width/2, 0));
-        pocket_list.add(new Pocket(max_width, 0));
-        pocket_list.add(new Pocket(0, max_height));
-        pocket_list.add(new Pocket(max_width/2, max_height));
-        pocket_list.add(new Pocket(max_width, max_height));
+        pocket_list = new ArrayList<>();
+        pocket_list.add(new Pocket(0.112, 0.128));
+        pocket_list.add(new Pocket(max_width/2 - 0.018, 0.108));
+        pocket_list.add(new Pocket(max_width - 0.134, 0.134));
+        pocket_list.add(new Pocket(0.112, max_height - 0.128));
+        pocket_list.add(new Pocket(max_width/2 - 0.018, max_height - 0.108));
+        pocket_list.add(new Pocket(max_width - 0.134, max_height - 0.134));
         lb = new LeftBoard();
         rb = new RightBoard();
         tb = new TopBoard();

@@ -17,10 +17,12 @@ class TopBoard extends GameObject {
 
     @Override
     boolean interactionCheck(CueBall b) {
-        if (b.y <= CueBall.r) {
-            return true;
-        }
-        return false;
+        return true && (
+            b.y <= CueBall.r + BOARD_OFFSET_Y &&
+            b.x > Pocket.r + BOARD_OFFSET_X &&
+            b.x < max_width - Pocket.r - BOARD_OFFSET_X &&
+            (b.x > max_width/2 + Pocket.r || b.x < max_width/2 - Pocket.r)
+        );
     }
 
     @Override

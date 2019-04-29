@@ -21,10 +21,12 @@ class BottomBoard extends GameObject {
 
     @Override
     boolean interactionCheck(CueBall b) {
-        if (Math.abs(b.y - max_height) <= CueBall.r) {
-            return true;
-        }
-        return false;
+        return true && (
+            Math.abs(b.y - max_height + BOARD_OFFSET_Y) <= CueBall.r &&
+            b.x > Pocket.r + BOARD_OFFSET_X &&
+            b.x < max_width - Pocket.r - BOARD_OFFSET_X && 
+            (b.x > max_width/2 + Pocket.r || b.x < max_width/2 - Pocket.r)
+        );
     }
 
     @Override

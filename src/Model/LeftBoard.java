@@ -17,10 +17,11 @@ public class LeftBoard extends GameObject {
     
     @Override
     boolean interactionCheck(CueBall b) {
-        if (b.x <= CueBall.r) {
-            return true;
-        }
-        return false;
+        return true && (
+            b.x <= CueBall.r + BOARD_OFFSET_X &&
+            b.y > Pocket.r + BOARD_OFFSET_Y &&
+            b.y < max_height - Pocket.r - BOARD_OFFSET_Y
+        );
     }
 
     @Override

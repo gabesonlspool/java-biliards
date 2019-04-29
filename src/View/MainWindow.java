@@ -13,6 +13,7 @@ package View;
 import Controller.WindowCloseHandler;
 import Model.CueBall;
 import Model.GameEngine;
+import Model.StateManager;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -30,25 +31,17 @@ public class MainWindow {
         WindowCloseHandler w = new WindowCloseHandler();
         window.addWindowListener(w);
               
-        GameMenu m = new GameMenu(
-            scrsz.width * 3/4,
-            0,
-            scrsz.width * 1/4,
-            scrsz.height
-        );
+        GameMenu m = new GameMenu(scrsz);
         window.add(m);
                 
+        StateManager mng = StateManager.getInstance();       
         GameEngine e = new GameEngine();
-        CueBall b = new CueBall(1, 1);
-        b.setVelocity(2.5, 0.9);
+        CueBall b = new CueBall(2, 1);
         e.AddBall(b);
         e.AddBall(new CueBall(1.5, 0.5));
-        ScreenEngine s = new ScreenEngine(
-            e, scrsz.width * 3/4,
-            scrsz.height * 3/4
-        );
+        ScreenEngine s = new ScreenEngine(e, scrsz.width, scrsz.height);
         e.AddScreenEngine(s);
-        s.setLocation(0, 40);
+        s.setVisible(false);
         window.add(s);
         
         window.setFocusable(true);

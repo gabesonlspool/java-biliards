@@ -12,7 +12,7 @@ package Model;
 
 public class Pocket extends GameObject {
     
-    public static final double r = 0.083;
+    public static final double r = 0.063;
     
     Pocket(double coord1, double coord2){
         super(coord1, coord2);
@@ -32,6 +32,6 @@ public class Pocket extends GameObject {
 
     @Override
     void interact(CueBall b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        b.setScored();
     }   
 }

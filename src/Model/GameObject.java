@@ -14,7 +14,11 @@ package Model;
 abstract public class GameObject {
     
     public static final double max_width = 2.54;
-    public static final double max_height = 1.27;
+    public static final double max_height = 1.436;
+    protected static final double BOARD_OFFSET_X = 
+            (double) 60 / (double) 1327 * max_width;
+    protected static final double BOARD_OFFSET_Y = 
+            (double) 60 / (double) 750 * max_height;
     
     public double x;
     public double y;

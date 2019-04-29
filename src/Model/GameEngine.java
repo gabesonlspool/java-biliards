@@ -13,35 +13,35 @@ import java.util.Timer;
  * @author andrey
  */
 
-public class GameEngine {
+public class GameEngine implements Runnable {
+         
+    protected static final double tick = 0.02;
     
-    public static final boolean AIMING   = false;
-    public static final boolean MOVEMENT = true;
-    
-    
-    public static boolean state;
-     //tick - интервал времени в секундах, через который обновляется движок
-    protected static final double tick = 0.001;
-    // Логично сделать движок singleton-ом
     private static Table t; // Стол
     private static ArrayList<CueBall> balls;
-    private static MasterBall master = new MasterBall(0.5, 0.5);// Список шаров на столе
+    private static MasterBall master = new MasterBall(0.5, 0.5);
     private static Cue cue;
-    private static ScreenEngine screng; // Отрисовщик игорового поля
-    public static final GameEngine ENGINE = new GameEngine();   
-    
+    private static ScreenEngine screng;
+
+    static ScreenEngine getScreenEngine() {
+        return screng;
+    }
+       
     public GameEngine() {
-        state = AIMING;
         balls = new ArrayList<>();
         cue = new Cue();
         t = new Table();
     }
-      
-    public static void run() {
-               
-        if (state == MOVEMENT) {
+          
+    @Override
+    public void run() {
+        if (StateManager.state == StateManager.MOVEMENT) {
             boolean stop = false;
+            
             while (true) {
+                
+                long startTime = System.currentTimeMillis();
+                
                 for (CueBall b: balls) {
                     if (master.interactionCheck(b)) b.interact(master);
                 
@@ -69,40 +69,43 @@ public class GameEngine {
                 if (t.tb.interactionCheck(master)) t.tb.interact(master);
                 if (t.lb.interactionCheck(master)) t.lb.interact(master);
                 if (t.rb.interactionCheck(master)) t.rb.interact(master);
+                
+                for (Pocket p: t.pocket_list) {
+                    if (p.interactionCheck(master)) p.interact(master);
+                }
             
-                screng.update();
                 boolean tmp = master.update();
                 stop = tmp || stop;
-            
+                screng.update();
+                
+                long estimatedTime = System.currentTimeMillis() - startTime;
+                
+                if (estimatedTime < 20) {
+                    try {
+                        Thread.sleep((20 - estimatedTime));
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    } 
+                }
+                
                 if (!stop) break;
                 stop = false;
-            
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
             }
-            switchState();
         } 
-               
+      
     }
     
-    public static void switchState() {
-        if (state == AIMING) {
-            state = MOVEMENT;
-        } else state = AIMING;
-    }
     
     public void AddBall(CueBall b) {
         balls.add(b);
     }
-                    
-    public ArrayList<CueBall> getCueBallList() {
+    
+    
+    public static ArrayList<CueBall> getCueBallList() {
         return balls;
     }
     
-    public Table getTable() {
+    public static Table getTable() {
         return t;
     }
     
@@ -110,11 +113,11 @@ public class GameEngine {
         screng = e;
     }
 
-    public MasterBall getMasterBall() {
+    public static MasterBall getMasterBall() {
         return master;
     }
     
-    public Cue getCue() {
+    public static Cue getCue() {
         return cue;
     }
    
