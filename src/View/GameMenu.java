@@ -12,16 +12,19 @@ import View.Buttons.OptionsButton;
 import View.Buttons.QuitButton;
 import Controller.MouseButtonClickHandler;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
         
 
-public class GameMenu extends Container {
+public final class GameMenu extends Container {
 
-    protected GameMenu(int x, int y, int w, int h) {
+    protected GameMenu(Dimension screensize) {
         super();
-        setBounds(x, y, w, h/2);
+        setBounds(
+                screensize.width/4, screensize.height/4,
+                screensize.width/2, screensize.height/2);
         
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();

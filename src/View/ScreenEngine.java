@@ -6,16 +6,17 @@
 package View;
 
 import Controller.CueMouseListener;
-import Model.Cue;
-import Model.CueBall;
-import Model.GameEngine;
-import static Model.GameEngine.ENGINE;
-import Model.MasterBall;
-import Model.Table;
+import Controller.CueMouseMotionListener;
+import Model.StateManager;
+import Net.EngineOutputDataFrame;
 import java.awt.Canvas;
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -27,83 +28,91 @@ public class ScreenEngine extends Canvas {
     protected MasterBallDrawer masterdrawer;
     private TableDrawer tabledrawer;
     private CueDrawer cuedrawer;
+    private BufferedImage background;
+    private BufferedImage blank;
     
+    protected EngineOutputDataFrame dataframe = null;
     protected static int CANVAS_WIDTH;
-    protected static int CANVAS_HEIGHT;
-   
+    protected static int CANVAS_HEIGHT;   
     
-    ScreenEngine(GameEngine e, int w, int h) {
+    ScreenEngine(int w, int h) {
+        
+        try {
+            blank = ImageIO.read(
+                new File(getClass().getResource("Sprite/blank.jpeg").toURI())
+            );
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        
+        try {
+            background = ImageIO.read(
+                new File(getClass().getResource("Sprite/Background.jpeg").toURI())
+            );
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
         
         CANVAS_HEIGHT = h;
         CANVAS_WIDTH = w;
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
-        addMouseMotionListener(new CueMouseListener());
+        addMouseListener(new CueMouseListener());
+        addMouseMotionListener(new CueMouseMotionListener());
         
-        MasterBall mb = e.getMasterBall();
-        masterdrawer = new MasterBallDrawer(mb);
-        mb.addDrawer(masterdrawer);
-        
+        tabledrawer = new TableDrawer();
+        masterdrawer = new MasterBallDrawer();                              
         cuedrawer = new CueDrawer();
-        Cue cue = e.getCue();
-        cue.addDrawer(cuedrawer);
         
-        balldrawers = new ArrayList<>(); 
-        ArrayList<CueBall> balls = e.getCueBallList();
-        for (CueBall b: balls) {
-            CueBallDrawer d = new CueBallDrawer(b);
-            balldrawers.add(d);
-            b.addDrawer(d);                   
-        }
-        
-        tabledrawer = new TableDrawer(w, h);
-        Table.addDrawer(tabledrawer);
-                                      
+        balldrawers = new ArrayList<>();    
     }
+    
+    
+    public void setDataFrame(EngineOutputDataFrame f) {
+        dataframe = f;
+    } 
+    
     
     public CueDrawer getCueDrawer() {
         return cuedrawer;
     }
-    
+        
+    public void update() {
+        masterdrawer.update(
+                dataframe.masterballcoords[0],
+                dataframe.masterballcoords[1]
+        );
+        if (dataframe.ballcoords != null) {
+            for (int i = 0; i < dataframe.ballcoords.size(); i++) {
+                balldrawers.get(i).update(
+                        dataframe.ballcoords.get(i)[0],
+                        dataframe.ballcoords.get(i)[1]
+                );   
+            }
+        }
+        cuedrawer.update();
+        paint(this.getGraphics());
+    }
+               
     
     @Override
     public void paint(Graphics g) {
         
-        tabledrawer.draw(g);
-        masterdrawer.draw(g);
-        for (CueBallDrawer d: balldrawers) {
-            d.draw(g);
-        }
-        cuedrawer.draw(g);
-        
-    }
-              
-    public void update() {
-               
-        BufferStrategy bs = this.getBufferStrategy();
-        if (bs == null) {
-            this.createBufferStrategy(2);
-            return;
-        }
-        
-        Graphics bar = bs.getDrawGraphics();
-        tabledrawer.draw(bar);
-        bar.dispose();
-        
-        if (ENGINE.state == ENGINE.AIMING) {
-            bar = bs.getDrawGraphics();
-            cuedrawer.draw(bar);
-            bar.dispose();
-        }
-        
-        bar = bs.getDrawGraphics();
+        Graphics bar = blank.getGraphics();
+        bar.drawImage(background, 0, 0,
+                CANVAS_WIDTH, CANVAS_HEIGHT, null);
+        tabledrawer.draw(bar);     
         masterdrawer.draw(bar);
-        bar.dispose();
         for (CueBallDrawer d: balldrawers) {
-            bar = bs.getDrawGraphics();
             d.draw(bar);
-            bar.dispose();
         }
-        bs.show();
+        if (StateManager.state == StateManager.AIMING) {
+            cuedrawer.draw(bar);
+        }
+        
+        g.drawImage(
+                blank, 0, 0,
+                CANVAS_WIDTH, CANVAS_HEIGHT, null
+        );
         
     }
 }

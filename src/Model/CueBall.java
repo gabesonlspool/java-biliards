@@ -10,21 +10,23 @@ import View.CueBallDrawer;
 
 public class CueBall extends GameObject {
     
-    public static final double m = 0.17; // масса шара
-    public static final double r = 0.057; // радиус шара
+    private static final double m = 0.17; // масса шара
+    private CueBallDrawer drawer;
     private static final double f = 0.25; //коэффициент трения
-    // Count - общее количество шаров на столе
-    protected static int count = 0;
-    // Номер шара
-    public int number = 0;
-    // Графические свойства шара
-    private CueBallDrawer gprop;
+    private boolean is_scored;
+    
+    
+    protected static int count = 0; // общее количество шаров на столе
     protected double[] V;
     protected double[] A;
-
+    
+    public static final double r = 0.087 / 2; // радиус шара
+    public static final double V_MAX = 2.0;
+    public int number = 0;
     
     public CueBall(double coord1, double coord2) {
         super(coord1, coord2);
+        is_scored = false; 
         V = new double[2];
         A = new double[2];
         number = count;
@@ -40,12 +42,12 @@ public class CueBall extends GameObject {
             return false;
         }
         
-        if (Math.abs(V[0]) < 1e-3 && A[0] != 0) {
+        if (Math.abs(V[0]) < 0.5e-2 && A[0] != 0) {
             A[0] = 0;
             V[0] = 0;
         }
         
-        if (Math.abs(V[1]) < 1e-3 && A[1] != 0) {
+        if (Math.abs(V[1]) < 0.5e-2 && A[1] != 0) {
             A[1] = 0;
             V[1] = 0;
         }
@@ -68,8 +70,9 @@ public class CueBall extends GameObject {
     }
     
     public boolean update() {
-        boolean result = this.Move();
-        gprop.update(x, y);
+        boolean result = false;
+        if (!is_scored) 
+            result = result || this.Move();
         return result;
     }
        
@@ -81,7 +84,7 @@ public class CueBall extends GameObject {
     }
     
     public void addDrawer(CueBallDrawer d) {
-        gprop = d;
+        drawer = d;
     }
     
     @Override
@@ -94,8 +97,12 @@ public class CueBall extends GameObject {
     
     
     @Override
-    void interact(CueBall b) {
+    protected void interact(CueBall b) {
         Physics.calculateCollision(b, this);
+    }
+
+    protected void setScored() {
+        is_scored = true;
     }
     
     

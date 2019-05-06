@@ -5,7 +5,6 @@
  */
 package View;
 
-import Model.CueBall;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
@@ -16,9 +15,8 @@ public class MasterBallDrawer extends CueBallDrawer {
     static int coord1;
     static int coord2;
     
-    MasterBallDrawer(CueBall b) {
-        super(b);
-        b.addDrawer(this);
+    MasterBallDrawer() {
+        super();
         coord1 = x;
         coord2 = y;
     }

@@ -5,7 +5,9 @@
  */
 package View.Buttons;
 
-import Model.GameEngine;
+import Model.StateManager;
+import View.GameMenu;
+import View.ScreenEngine;
 import java.awt.event.MouseListener;
 
 /**
@@ -19,8 +21,15 @@ public class StartGameButton extends GameButton {
     }
    
     public void update() {
-        GameEngine.switchState();
-        GameEngine.run();
+        
+        GameMenu menu = (GameMenu) this.getParent();
+        menu.setVisible(false);
+        ScreenEngine screng  =
+                (ScreenEngine) this.getParent().getParent().getComponent(1);
+        
+        screng.setVisible(true); 
+                
+        StateManager.switchState(StateManager.AIMING);
     }
     
 }

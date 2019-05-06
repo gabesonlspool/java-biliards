@@ -5,10 +5,9 @@
  */
 package View;
 
-import Controller.CueMouseListener;
+import Model.CueBall;
 import Model.GameEngine;
-import Model.GameObject;
-import static View.CueBallDrawer.r;
+import Model.StateManager;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -23,9 +22,12 @@ import java.awt.geom.AffineTransform;
 public class CueDrawer extends GameObjectDrawer {
     
     private double theta = 0.0;
+    private final int PULL_RANGE = 200;
+    protected double[] V;
 
     public CueDrawer() {
         super("Sprite/Cue.jpeg");
+        V = new double[] {0.0, 0.0};
     }    
        
     
@@ -59,42 +61,84 @@ public class CueDrawer extends GameObjectDrawer {
     }   
 
     public void update() {
-        Point mouse  = MouseInfo.getPointerInfo().getLocation();
-        Point master = MasterBallDrawer.getCoords();
-        double sin = ((double) (mouse.y - master.y - CueBallDrawer.r)) /
-            (Math.hypot(
-                    ((double)(mouse.y - CueBallDrawer.r -  master.y)),
-                    ((double)(mouse.x - CueBallDrawer.r - master.x))
-                )
+        
+        if (StateManager.state == StateManager.AIMING) {
+                     
+            Point mouse  = MouseInfo.getPointerInfo().getLocation();
+            Point master = MasterBallDrawer.getCoords();
+            double sin = ((double) (mouse.y - master.y - CueBallDrawer.r)) /
+                (Math.hypot(
+                        ((double)(mouse.y - CueBallDrawer.r -  master.y)),
+                        ((double)(mouse.x - CueBallDrawer.r - master.x))
+                    )
             );
         
-        double cos = ((double) (mouse.x - CueBallDrawer.r - master.x)) /
-            (Math.hypot(
-                    ((double)(mouse.y - CueBallDrawer.r -  master.y)),
-                    ((double)(mouse.x - CueBallDrawer.r - master.x))
-                )
-            );
-        
-              
-        this.setCoords(
-            (int) Math.round(CueBallDrawer.r * (1 + cos) + 13 * sin) + master.x,
-            (int) Math.round(CueBallDrawer.r * (1 + sin) - 13 * cos) + master.y 
-        );
-        
-        double offset = (cos > 0) ? 0 : Math.PI;
-        if (Math.abs(cos) > 1e-5) {
-            theta = Math.atan(sin/cos) + offset;
-        } else {
-            if (sin > 0) theta = Math.PI / 2;
-            if (sin < 0) theta = Math.PI * 3 / 2;
-        }
-        
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+            double cos = ((double) (mouse.x - CueBallDrawer.r - master.x)) /
+                (Math.hypot(
+                        ((double)(mouse.y - CueBallDrawer.r -  master.y)),
+                        ((double)(mouse.x - CueBallDrawer.r - master.x))
+                    )
+                );
             
+            
+            double projection = 
+                    (
+                        ((double) mouse.x - 
+                        Math.round (
+                            CueBallDrawer.r * (1 + Math.cos(theta)) +
+                            13 * Math.sin(theta)
+                            + master.x
+                        )) * (double) Math.cos(theta)
+                    ) 
+                    +
+                    (
+                        ((double) mouse.y - 
+                        Math.round (
+                            CueBallDrawer.r * (1 + Math.sin(theta)) +
+                            13 * Math.cos(theta)
+                            + master.y
+                        )) * (double) Math.sin(theta)
+                    );
+            
+            int shift = Math.min((int) projection, (int) PULL_RANGE);
+  
+            
+            this.setCoords(
+                (int) Math.round (
+                    CueBallDrawer.r * (1 + Math.cos(theta)) +
+                    shift * Math.cos(theta) + 13 * Math.sin(theta)
+                ) + master.x,
+                (int) Math.round(
+                    CueBallDrawer.r * (1 + Math.sin(theta)) +
+                    shift * Math.sin(theta) - 13 * Math.cos(theta)
+                ) + master.y 
+            );
+            
+            
+            V[0] =
+                -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.cos(theta);
+            V[1] = 
+                -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.sin(theta);
+        
+            double offset = (cos > 0) ? 0 : Math.PI;
+            if (Math.abs(cos) > 1e-5) {
+                theta = Math.atan(sin/cos) + offset;
+            } else {
+                if (sin > 0) theta = Math.PI / 2;
+                if (sin < 0) theta = Math.PI * 3 / 2;
+            }
+        
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }           
+        } 
+    }
+    
+    
+    public double[] getStrikeVelocity() {
+        return V;
     }
 
     @Override

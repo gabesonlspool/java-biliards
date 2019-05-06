@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 
 public class MouseButtonClickHandler extends MouseAdapter {
 
+    @Override
     public void mouseClicked(MouseEvent me) {
         GameButton btn =(GameButton) me.getSource();       
         btn.update();
