@@ -5,13 +5,12 @@
  */
 package Controller;
 
-import Model.GameEngine;
 import Model.StateManager;
+import Net.Client;
+import Net.ClientCommandProcessor;
 import View.ScreenEngine;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 /**
  *
  * @author andrey
@@ -25,10 +24,8 @@ public class CueMouseListener extends MouseAdapter {
             StateManager.switchState(StateManager.MOVEMENT);
             double [] v = 
                 ((ScreenEngine) me.getSource()).getCueDrawer().getStrikeVelocity();
-            GameEngine.getMasterBall().setVelocity(v[0], v[1]);
-            Thread working_thread = new Thread(GameEngine.getInstance());
-            working_thread.run();
-            StateManager.switchState(StateManager.AIMING);
+               
+            Client.window.ccp.sendCommand(ClientCommandProcessor.STRIKE);
         }
     }
     

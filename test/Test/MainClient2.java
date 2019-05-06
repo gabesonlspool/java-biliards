@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package billiards;
+package Test;
+
+import Net.Client;
 
 /**
  *
  * @author andrey
  */
-public class Billiards {
-
-    /**
-     * @param args the command line arguments
-     */
+public class MainClient2 {
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        Client c = new Client();
+        c.run();
     }
     
 }

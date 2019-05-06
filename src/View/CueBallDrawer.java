@@ -19,14 +19,10 @@ public class CueBallDrawer extends GameObjectDrawer {
             (int) Math.round((double) TableDrawer.TABLE_WIDTH *
                     CueBall.r / GameObject.max_width);
         
-    public CueBallDrawer(CueBall ball) {
-        super("Sprite/Ball" + Integer.toString(ball.number) + ".jpeg");
-        ball.addDrawer(this);
-        active = true;
-        
-        int[] tmp = this.calculatePos(ball.x, ball.y);
-        x = tmp[0];
-        y = tmp[1];
+    public CueBallDrawer() {
+        super("Sprite/Ball1.jpeg");        
+        x = 0;
+        y = 0;
     }
        
     private int[] calculatePos(double x, double y) {

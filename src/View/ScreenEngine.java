@@ -7,12 +7,8 @@ package View;
 
 import Controller.CueMouseListener;
 import Controller.CueMouseMotionListener;
-import Model.Cue;
-import Model.CueBall;
-import Model.GameEngine;
-import Model.MasterBall;
 import Model.StateManager;
-import Model.Table;
+import Net.EngineOutputDataFrame;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -35,10 +31,11 @@ public class ScreenEngine extends Canvas {
     private BufferedImage background;
     private BufferedImage blank;
     
+    protected EngineOutputDataFrame dataframe = null;
     protected static int CANVAS_WIDTH;
     protected static int CANVAS_HEIGHT;   
     
-    ScreenEngine(GameEngine engine, int w, int h) {
+    ScreenEngine(int w, int h) {
         
         try {
             blank = ImageIO.read(
@@ -63,25 +60,16 @@ public class ScreenEngine extends Canvas {
         addMouseMotionListener(new CueMouseMotionListener());
         
         tabledrawer = new TableDrawer();
-        Table.addDrawer(tabledrawer);
-        
-        MasterBall mb = engine.getMasterBall();
-        masterdrawer = new MasterBallDrawer(mb);
-        mb.addDrawer(masterdrawer);                                   
-        
+        masterdrawer = new MasterBallDrawer();                              
         cuedrawer = new CueDrawer();
-        Cue cue = engine.getCue();
-        cue.addDrawer(cuedrawer);
         
-        balldrawers = new ArrayList<>(); 
-        ArrayList<CueBall> balls = engine.getCueBallList();
-        for (CueBall b: balls) {
-            CueBallDrawer d = new CueBallDrawer(b);
-            balldrawers.add(d);
-            b.addDrawer(d);                   
-        }
-        
+        balldrawers = new ArrayList<>();    
     }
+    
+    
+    public void setDataFrame(EngineOutputDataFrame f) {
+        dataframe = f;
+    } 
     
     
     public CueDrawer getCueDrawer() {
@@ -89,6 +77,19 @@ public class ScreenEngine extends Canvas {
     }
         
     public void update() {
+        masterdrawer.update(
+                dataframe.masterballcoords[0],
+                dataframe.masterballcoords[1]
+        );
+        if (dataframe.ballcoords != null) {
+            for (int i = 0; i < dataframe.ballcoords.size(); i++) {
+                balldrawers.get(i).update(
+                        dataframe.ballcoords.get(i)[0],
+                        dataframe.ballcoords.get(i)[1]
+                );   
+            }
+        }
+        cuedrawer.update();
         paint(this.getGraphics());
     }
                

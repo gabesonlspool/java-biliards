@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Table extends GameObject {
     
-    public static ArrayList<Pocket> pocket_list;
+    public ArrayList<Pocket> pocket_list;
     LeftBoard lb; //Left border
     RightBoard rb; //Right border
     TopBoard tb; // Top border
@@ -35,7 +35,7 @@ public class Table extends GameObject {
         bb = new BottomBoard();
     }
    
-    public static void addDrawer(TableDrawer d) {
+    public void addDrawer(TableDrawer d) {
         drawer = d;
     }
 

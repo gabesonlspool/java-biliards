@@ -25,7 +25,6 @@ public class TableDrawer extends GameObjectDrawer {
            
     public TableDrawer() {
         super("Sprite/Table.jpeg");
-        Table.addDrawer(this);
         TABLE_WIDTH = sprite.getWidth();
         TABLE_HEIGHT = sprite.getHeight();
         offset_x = (ScreenEngine.CANVAS_WIDTH - TABLE_WIDTH)/2;
@@ -59,12 +58,5 @@ public class TableDrawer extends GameObjectDrawer {
                 sprite, offset_x, offset_y,
                 TABLE_WIDTH, TABLE_HEIGHT, null
         );
-        for (Pocket p: Table.pocket_list) {
-            int [] pos = calculatePocketPos(p.x, p.y);
-            g.setColor(Color.BLACK);
-            g.fillOval(
-                pos[0], pos[1], POCKET_R * 2, POCKET_R * 2
-            );
-        }
     }
 }

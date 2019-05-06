@@ -73,7 +73,6 @@ public class CueBall extends GameObject {
         boolean result = false;
         if (!is_scored) 
             result = result || this.Move();
-            drawer.update(x, y);
         return result;
     }
        

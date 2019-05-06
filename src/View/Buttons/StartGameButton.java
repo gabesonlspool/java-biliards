@@ -5,13 +5,10 @@
  */
 package View.Buttons;
 
-import Model.GameEngine;
 import Model.StateManager;
 import View.GameMenu;
 import View.ScreenEngine;
-import java.awt.Graphics;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferStrategy;
 
 /**
  *
@@ -33,7 +30,6 @@ public class StartGameButton extends GameButton {
         screng.setVisible(true); 
                 
         StateManager.switchState(StateManager.AIMING);
-        new Thread(GameEngine.getInstance()).run();
     }
     
 }

@@ -11,18 +11,25 @@ package View;
  */
 
 import Controller.WindowCloseHandler;
-import Model.CueBall;
-import Model.GameEngine;
-import Model.StateManager;
+import Net.ClientCommandProcessor;
+import Net.EngineOutputDataFrame;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 
 
 public class MainWindow {
-    public static void main(String[] args){
+    
+    private Frame window;
+    public ScreenEngine screng;
+    
+    public ClientCommandProcessor ccp;
+    
+    public MainWindow() {
         
-        Frame window = new Frame("Billiard");
+        ccp = new ClientCommandProcessor();
+              
+        window = new Frame("Billiard");
         window.setLayout(null);
         
         Dimension scrsz = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,19 +41,16 @@ public class MainWindow {
         GameMenu m = new GameMenu(scrsz);
         window.add(m);
                 
-        StateManager mng = StateManager.getInstance();       
-        GameEngine e = new GameEngine();
-        CueBall b = new CueBall(2, 1);
-        e.AddBall(b);
-        e.AddBall(new CueBall(1.5, 0.5));
-        ScreenEngine s = new ScreenEngine(e, scrsz.width, scrsz.height);
-        e.AddScreenEngine(s);
-        s.setVisible(false);
-        window.add(s);
+        screng = new ScreenEngine(scrsz.width, scrsz.height);
+        screng.setVisible(false);
+        window.add(screng);
         
         window.setFocusable(true);
         window.setVisible(true);       
-
+    }
+    
+    public void setDataFrame(EngineOutputDataFrame df) {
+        screng.dataframe = df;
     }
 }
 
