@@ -13,16 +13,17 @@ import java.awt.geom.Ellipse2D;
 
 public class CueBallDrawer extends GameObjectDrawer {
     
-    private boolean active;
+    protected boolean is_inactive;
     
     protected static final int r = 
             (int) Math.round((double) TableDrawer.TABLE_WIDTH *
                     CueBall.r / GameObject.max_width);
         
-    public CueBallDrawer() {
-        super("Sprite/Ball1.jpeg");        
+    public CueBallDrawer(int i) {
+        super("Sprite/Ball" + Integer.toString(i) + ".jpeg");        
         x = 0;
         y = 0;
+        is_inactive = true;
     }
        
     private int[] calculatePos(double x, double y) {
@@ -40,15 +41,22 @@ public class CueBallDrawer extends GameObjectDrawer {
         return result;   
     }
 
-    @Override
-    public void update(double x, double y) {
+    public void update(double x, double y, boolean s) {
         int [] pos = calculatePos(x, y);
         this.setCoords(pos[0], pos[1]);
+        this.is_inactive = s;
     }
     
     @Override
     protected void draw(Graphics g) {
-        g.setClip(new Ellipse2D.Float(x, y, r * 2, r * 2));
-        g.drawImage(sprite, x, y, r * 2, r * 2, null);
+        if (!this.is_inactive) {
+            g.setClip(new Ellipse2D.Float(x, y, r * 2, r * 2));
+            g.drawImage(sprite, x, y, r * 2, r * 2, null);
+        }
     } 
+
+    @Override
+    public void update(double x, double y) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

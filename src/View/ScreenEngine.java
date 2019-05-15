@@ -7,14 +7,13 @@ package View;
 
 import Controller.CueMouseListener;
 import Controller.CueMouseMotionListener;
-import Model.StateManager;
+import Net.Client;
+import Net.StateManager;
 import Net.EngineOutputDataFrame;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.IOException;;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
@@ -24,44 +23,47 @@ import javax.imageio.ImageIO;
  */
 public class ScreenEngine extends Canvas {
     
-    private ArrayList<CueBallDrawer> balldrawers;
+    public EngineOutputDataFrame dataframe = null;
+    
     protected MasterBallDrawer masterdrawer;
+    protected static int CANVAS_WIDTH;
+    protected static int CANVAS_HEIGHT;  
+    
+    private MainWindow mainwindow;
+    private ArrayList<CueBallDrawer> balldrawers;
     private TableDrawer tabledrawer;
     private CueDrawer cuedrawer;
     private BufferedImage background;
     private BufferedImage blank;
-    
-    protected EngineOutputDataFrame dataframe = null;
-    protected static int CANVAS_WIDTH;
-    protected static int CANVAS_HEIGHT;   
-    
+        
     ScreenEngine(int w, int h) {
         
+        CANVAS_HEIGHT = h;
+        CANVAS_WIDTH = w;
+                
         try {
             blank = ImageIO.read(
-                new File(getClass().getResource("Sprite/blank.jpeg").toURI())
+                getClass().getResourceAsStream("Sprite/blank.jpeg")
             );
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         
         try {
             background = ImageIO.read(
-                new File(getClass().getResource("Sprite/Background.jpeg").toURI())
+                getClass().getResourceAsStream("Sprite/Background.jpeg")
             );
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         
-        CANVAS_HEIGHT = h;
-        CANVAS_WIDTH = w;
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         addMouseListener(new CueMouseListener());
         addMouseMotionListener(new CueMouseMotionListener());
         
         tabledrawer = new TableDrawer();
         masterdrawer = new MasterBallDrawer();                              
-        cuedrawer = new CueDrawer();
+        cuedrawer = new CueDrawer(this);
         
         balldrawers = new ArrayList<>();    
     }
@@ -69,27 +71,32 @@ public class ScreenEngine extends Canvas {
     
     public void setDataFrame(EngineOutputDataFrame f) {
         dataframe = f;
-    } 
-    
-    
-    public CueDrawer getCueDrawer() {
-        return cuedrawer;
     }
-        
+    
+    public void initBallDrawers() {
+        for (int i = 1; i < dataframe.ball_num + 1; i++) {
+            balldrawers.add(new CueBallDrawer(i));
+        }
+    }
+    
     public void update() {
         masterdrawer.update(
-                dataframe.masterballcoords[0],
-                dataframe.masterballcoords[1]
+                dataframe.master_ball_info.x,
+                dataframe.master_ball_info.y,
+                dataframe.master_ball_info.is_scored
         );
-        if (dataframe.ballcoords != null) {
-            for (int i = 0; i < dataframe.ballcoords.size(); i++) {
+        
+        if (dataframe.ball_info != null) {
+            for (int i = 0; i < dataframe.ball_info.size(); i++) {
                 balldrawers.get(i).update(
-                        dataframe.ballcoords.get(i)[0],
-                        dataframe.ballcoords.get(i)[1]
+                        dataframe.ball_info.get(i).x,
+                        dataframe.ball_info.get(i).y,
+                        dataframe.ball_info.get(i).is_scored
                 );   
             }
         }
         cuedrawer.update();
+        
         paint(this.getGraphics());
     }
                
@@ -105,7 +112,8 @@ public class ScreenEngine extends Canvas {
         for (CueBallDrawer d: balldrawers) {
             d.draw(bar);
         }
-        if (StateManager.state == StateManager.AIMING) {
+        
+        if (Client.state_manager.state == StateManager.AIMING) {
             cuedrawer.draw(bar);
         }
         
@@ -113,6 +121,9 @@ public class ScreenEngine extends Canvas {
                 blank, 0, 0,
                 CANVAS_WIDTH, CANVAS_HEIGHT, null
         );
-        
+    }
+    
+    public CueDrawer getCueDrawer() {
+        return cuedrawer;
     }
 }

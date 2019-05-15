@@ -13,17 +13,25 @@ import java.util.ArrayList;
  */
 public class EngineOutputDataFrame implements Serializable {
     
-    public double[] masterballcoords;
-    public ArrayList<double[]> ballcoords;
+    public BallInfo master_ball_info;
+    public ArrayList<BallInfo> ball_info;
+    public int ball_num;
+    public int state;
     
-    public EngineOutputDataFrame() {
-        masterballcoords = null;
-        ballcoords = null;
+    public EngineOutputDataFrame(int n) {
+        master_ball_info = null;
+        ball_info = null;
+        ball_num = n;
+        state = StateManager.AIMING;
     }
         
-    public void setData(double[] new_mcoords, ArrayList<double[]> new_bcords) {
-        masterballcoords = new_mcoords;
-        ballcoords = new_bcords;
+    public void setData(
+            int st, BallInfo new_mbinfo,
+            ArrayList<BallInfo> new_binfo
+    ) {
+        state = st;
+        master_ball_info = new_mbinfo;
+        ball_info = new_binfo;
     }
     
 }

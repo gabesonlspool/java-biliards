@@ -5,11 +5,11 @@
  */
 package Controller;
 
-import Model.GameEngine;
-import Model.StateManager;
+import Net.StateManager;
+import Net.Client;
+import View.MainWindow;
 import View.ScreenEngine;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 /**
@@ -20,7 +20,7 @@ public class CueMouseMotionListener implements MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        if (StateManager.state == StateManager.AIMING) {
+        if (Client.state_manager.state == StateManager.AIMING) {
             ((ScreenEngine) me.getSource()).getCueDrawer().update();
             ((ScreenEngine) me.getSource()).update();
         }

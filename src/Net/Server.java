@@ -1,13 +1,11 @@
 package Net;
 
-import Model.GameEngine;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.net.Socket;
@@ -20,27 +18,33 @@ public class Server implements Runnable {
     
     protected final static int PREFERRED_PORT = 20000;
     
-    private ArrayList<Socket> waiting_room;
+    private ArrayList<InetAddress> client_addresses;
+    private ArrayList<Integer> client_ports;
     private ServerSocket serverSocket;
-    private GameEngine engine;
+        
     private static ObjectOutputStream out_frame;
     private static PrintWriter out;
-    private static BufferedReader in;
+    private static DataInputStream in;
        
     public Server() {
-        engine = new GameEngine();
-        waiting_room = new ArrayList<>();       
+        
+        client_addresses = new ArrayList<>();
+        client_ports = new ArrayList<>();
+        
         try {
             serverSocket = new ServerSocket(PREFERRED_PORT);
         }
         catch (IOException e) { e.printStackTrace();}
+        
     }
 
     @Override
     public void run() {
         
-        while (true) {            
+        while (true) {
+            
             try {
+                
                 Socket clientSocket = serverSocket.accept();  
                 out_frame = new ObjectOutputStream(
                         clientSocket.getOutputStream()
@@ -48,28 +52,24 @@ public class Server implements Runnable {
                 out = new PrintWriter(
                         new OutputStreamWriter(out_frame)
                 );
-                in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
-                 
-                
-                ServerSocket s = new ServerSocket(0);
-                int port = s.getLocalPort();
-                
+                in = new DataInputStream(clientSocket.getInputStream());
+                                 
                 out.write("Connection accepted");
-                out.flush();
-                out_frame.writeObject(engine.getDataFrame());
                 out.flush();
                 out_frame.writeObject(clientSocket.getInetAddress());
                 out.flush();
-                out_frame.writeInt(clientSocket.getPort());
+                if (client_addresses.size() % 2 == 0) {
+                    out_frame.writeBoolean(false);
+                } else {
+                    out_frame.writeBoolean(true);
+                }
                 out.flush();
-                out_frame.writeInt(port);
-                out.flush();
-                s.close();
+                                              
+                int client_port = in.readInt();                
+                client_addresses.add(clientSocket.getInetAddress());
+                client_ports.add((Integer) client_port);
                 
-                waiting_room.add(clientSocket);
-                
-                if (waiting_room.size() == 2) {
+                if (client_addresses.size() == 2) {
                     out.println(
                         "Your game will start in a couple of seconds"
                     );
@@ -79,19 +79,19 @@ public class Server implements Runnable {
                 
                 out.flush();
                 
-                String response = in.readLine();
-                System.out.println("Client: " + response);
-                
-                clientSocket.close();
                 out.close();
                 out_frame.close();
                 in.close();
-                if (waiting_room.size() == 2) {
+                clientSocket.close();
+
+                
+                if (client_addresses.size() == 2) {
                     new Thread(new GameServiceTask(
-                        engine, port,  
-                        waiting_room.get(0), waiting_room.get(1)
+                        client_addresses.get(0), client_ports.get(0),
+                        client_addresses.get(1), client_ports.get(1)
                     )).start();
                 }
+                
             } catch (IOException ex) {
                 ex.printStackTrace();   
             } 

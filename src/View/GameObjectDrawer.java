@@ -26,9 +26,9 @@ abstract class GameObjectDrawer {
         if (path_to_sprite != null) {
             try {
                 sprite = ImageIO.read(
-                    new File(getClass().getResource(path_to_sprite).toURI())
+                    getClass().getResourceAsStream(path_to_sprite)
                 );
-            } catch (IOException | URISyntaxException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

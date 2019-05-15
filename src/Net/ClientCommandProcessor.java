@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -20,10 +18,7 @@ public class ClientCommandProcessor {
     private static Socket client_socket = null;
     private static BufferedReader in;
     private static DataOutputStream out; 
-    
-    public static final int SWITCH_STATE = 0;
-    public static final int STRIKE = 1;
-        
+          
     public ClientCommandProcessor() {}
     
     protected void setServerParams(InetAddress addr, int p) {
@@ -31,39 +26,23 @@ public class ClientCommandProcessor {
         comm_port = p;    
     }
     
-    public void sendCommand(int command) {
+    public void sendCommand(double v_x, double v_y) {
         
         try {
             
             client_socket = new Socket(comm_address, comm_port);
-            //client_socket.setSoTimeout(10000);
-            
+            client_socket.setSoTimeout(10000);   
             try {
                                 
                 in = new BufferedReader(
                         new InputStreamReader(client_socket.getInputStream()));
                 out = new DataOutputStream(
                         client_socket.getOutputStream());
-                PrintWriter out_str = new PrintWriter(
-                        new OutputStreamWriter(out));
-                
-                             
-                switch (command) {
-                    case SWITCH_STATE:
-                        out_str.println("SWITCH STATE");
-                        out_str.flush();
-                    case STRIKE:
-                        out_str.println("STRIKE");
-                        out_str.flush();
-                        out.writeDouble(1.6);
-                        out.flush();
-                        out.writeDouble(1.6);
-                        out.flush();
-                }
-                
-                String response = in.readLine();
-                System.out.println("Server:" + response);
-                
+         
+                out.writeDouble(v_x);
+                out.flush();
+                out.writeDouble(v_y);
+                out.flush();               
                 
             } finally {
                 client_socket.close();
@@ -72,7 +51,7 @@ public class ClientCommandProcessor {
             }
             
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Client.window.showConnectionWarning();
         }
         
     }

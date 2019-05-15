@@ -11,13 +11,12 @@ import Controller.MouseButtonClickHandler;
  *
  * @author andrey
  */
-public class QuitRejectButton extends GameButton {
-
-    public QuitRejectButton(MouseButtonClickHandler l) {
-        super(l, "No");
+public class BackButton extends GameButton {
+    
+    public BackButton(MouseButtonClickHandler l) {
+        super(l, "Back");
     }
     
-    @Override
     public void update() {
         this.getParent().setVisible(false);
     }

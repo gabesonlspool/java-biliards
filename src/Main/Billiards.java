@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Test;
+package Main;
 
 import Net.Client;
 
@@ -11,7 +11,7 @@ import Net.Client;
  *
  * @author andrey
  */
-public class MainClient1 {
+public class Billiards {
     public static void main(String[] args) {
         Client c = new Client();
     }

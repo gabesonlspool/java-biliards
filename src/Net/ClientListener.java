@@ -6,12 +6,8 @@
 package Net;
 
 import Model.GameEngine;
-import Model.StateManager;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -23,15 +19,17 @@ import java.net.Socket;
  */
 class ClientListener implements Runnable {
     
-    private ServerSocket socket;
-    private DataInputStream in;
-    private PrintWriter out;
     private GameEngine engine;
+    private StateManager state_manager;
+    
+    private ServerSocket socket;
+    private DataInputStream in;   
     
     
-    protected ClientListener(GameEngine e, int port) {
+    protected ClientListener(GameEngine e, StateManager mng, int port) {
         
         engine = e;
+        state_manager = mng;
         try {
             socket = new ServerSocket(port);
         } catch (IOException ex) {ex.printStackTrace();}
@@ -47,35 +45,18 @@ class ClientListener implements Runnable {
                 
                 Socket clientSocket = socket.accept();  
                 in = new DataInputStream(clientSocket.getInputStream());
-                
-                BufferedReader in_string = 
-                            new BufferedReader(new InputStreamReader(in));
-                out = new PrintWriter(
-                    new OutputStreamWriter(clientSocket.getOutputStream()));
-                
+                                
                 try {
-                    
-                    String command = in_string.readLine();
-                    System.out.println("Client: " + command);
-                
-                    switch (command) {
-                        case "SWITCH STATE": 
-                            StateManager.switchState(in.readInt());
-                        
-                        case "STRIKE":
-                            engine.getMasterBall().setVelocity(
-                                    Math.random() * 2, Math.random() * 2);
-                            StateManager.switchState(StateManager.MOVEMENT);
-                    }
-                    
-                    out.println("Successfull");
-                    out.flush();
-                
+                                                         
+                    double v_x = in.readDouble();
+                    double v_y = in.readDouble();
+                    engine.getMasterBall().setVelocity(v_x, v_y);
+                    state_manager.switchState(StateManager.MOVEMENT);
+                                 
                 } finally {
+                    
                     clientSocket.close();
-                    in_string.close();
                     in.close();
-                    out.close();
                 }
                
             } catch (IOException ex) {

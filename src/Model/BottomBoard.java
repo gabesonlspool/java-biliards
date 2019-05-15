@@ -21,11 +21,13 @@ class BottomBoard extends GameObject {
 
     @Override
     boolean interactionCheck(CueBall b) {
+        
+        double [] pc = b.predictCoords();
         return true && (
-            Math.abs(b.y - max_height + BOARD_OFFSET_Y) <= CueBall.r &&
-            b.x > Pocket.r + BOARD_OFFSET_X &&
-            b.x < max_width - Pocket.r - BOARD_OFFSET_X && 
-            (b.x > max_width/2 + Pocket.r || b.x < max_width/2 - Pocket.r)
+            Math.abs(pc[1] - max_height + BOARD_OFFSET_Y) <= CueBall.r &&
+            pc[0] > Pocket.r + BOARD_OFFSET_X &&
+            pc[0] < max_width - Pocket.r - BOARD_OFFSET_X && 
+            (pc[0] > max_width/2 + Pocket.r || pc[0] < max_width/2 - Pocket.r)
         );
     }
 

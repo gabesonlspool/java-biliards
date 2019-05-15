@@ -7,7 +7,8 @@ package View;
 
 import Model.CueBall;
 import Model.GameEngine;
-import Model.StateManager;
+import Net.Client;
+import Net.StateManager;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -21,12 +22,16 @@ import java.awt.geom.AffineTransform;
  */
 public class CueDrawer extends GameObjectDrawer {
     
+    protected double[] V;
+    
     private double theta = 0.0;
     private final int PULL_RANGE = 200;
-    protected double[] V;
+    private ScreenEngine screng;
+    
 
-    public CueDrawer() {
+    public CueDrawer(ScreenEngine scr) {
         super("Sprite/Cue.jpeg");
+        screng = scr;
         V = new double[] {0.0, 0.0};
     }    
        
@@ -62,7 +67,7 @@ public class CueDrawer extends GameObjectDrawer {
 
     public void update() {
         
-        if (StateManager.state == StateManager.AIMING) {
+        if (Client.state_manager.state == StateManager.AIMING) {
                      
             Point mouse  = MouseInfo.getPointerInfo().getLocation();
             Point master = MasterBallDrawer.getCoords();

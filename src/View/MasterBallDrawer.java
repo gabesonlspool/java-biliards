@@ -16,7 +16,7 @@ public class MasterBallDrawer extends CueBallDrawer {
     static int coord2;
     
     MasterBallDrawer() {
-        super();
+        super(0);
         coord1 = x;
         coord2 = y;
     }
@@ -26,8 +26,8 @@ public class MasterBallDrawer extends CueBallDrawer {
     }
     
     @Override
-    public void update(double x, double y) {
-        super.update(x, y);
+    public void update(double x, double y, boolean  s) {
+        super.update(x, y, s);
         coord1 = this.x;
         coord2 = this.y;
     }
