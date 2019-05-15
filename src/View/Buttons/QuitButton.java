@@ -6,7 +6,6 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;

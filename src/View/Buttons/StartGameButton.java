@@ -5,11 +5,8 @@
  */
 package View.Buttons;
 
+import Controller.EnterKeyPressHandler;
 import Controller.MouseButtonClickHandler;
-import Net.StateManager;
-import Net.Client;
-import View.GameMenu;
-import View.ScreenEngine;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
@@ -58,6 +55,7 @@ public class StartGameButton extends GameButton {
         TextField f = new TextField(30);
         f.setFont(new Font("Ubuntu",Font.PLAIN, 24));
         f.setText("127.0.0.1");
+        f.addKeyListener(new EnterKeyPressHandler());
         grid.setConstraints(f, gbc);
         d.add(f);
 
@@ -78,7 +76,7 @@ public class StartGameButton extends GameButton {
         d.add(new BackButton(new MouseButtonClickHandler()), gbc);
         d.setModal(true);
         d.setVisible(true);
- 
+        
     }
     
 }

@@ -19,6 +19,7 @@ class RightBoard extends GameObject {
     boolean interactionCheck(CueBall b) {
         double [] pc = b.predictCoords();
         return true && (
+            (!b.is_scored) && 
             Math.abs(pc[0] - max_width + BOARD_OFFSET_X) <= CueBall.r &&
             pc[1] > Pocket.r + BOARD_OFFSET_Y &&
             pc[1] < max_height - Pocket.r - BOARD_OFFSET_Y

@@ -15,9 +15,7 @@ class BottomBoard extends GameObject {
         super(max_width/2, max_height);
     }
     
-    void update() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    void update() {}
 
     @Override
     boolean interactionCheck(CueBall b) {
@@ -26,6 +24,7 @@ class BottomBoard extends GameObject {
         return true && (
             Math.abs(pc[1] - max_height + BOARD_OFFSET_Y) <= CueBall.r &&
             pc[0] > Pocket.r + BOARD_OFFSET_X &&
+            (!b.is_scored) && 
             pc[0] < max_width - Pocket.r - BOARD_OFFSET_X && 
             (pc[0] > max_width/2 + Pocket.r || pc[0] < max_width/2 - Pocket.r)
         );

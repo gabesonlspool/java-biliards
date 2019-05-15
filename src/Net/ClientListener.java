@@ -8,8 +8,6 @@ package Net;
 import Model.GameEngine;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -26,13 +24,17 @@ class ClientListener implements Runnable {
     private DataInputStream in;   
     
     
-    protected ClientListener(GameEngine e, StateManager mng, int port) {
+    protected ClientListener(
+            GameEngine e, StateManager mng, int port
+    ) throws IOException {
         
         engine = e;
         state_manager = mng;
         try {
             socket = new ServerSocket(port);
-        } catch (IOException ex) {ex.printStackTrace();}
+        } catch (IOException ex) {
+            throw new IOException(ex);
+        }
         
     }
     

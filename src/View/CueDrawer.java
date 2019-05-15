@@ -6,7 +6,6 @@
 package View;
 
 import Model.CueBall;
-import Model.GameEngine;
 import Net.Client;
 import Net.StateManager;
 import java.awt.Graphics;

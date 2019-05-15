@@ -31,8 +31,6 @@ public class CueBall extends GameObject {
         
     protected boolean Move() {
         
-        // Если шары перестают двигаться, то движок должен остановиться
-        
         if (V[0] == 0 && V[1] == 0) {
             return false;
         }
@@ -92,10 +90,10 @@ public class CueBall extends GameObject {
         double[] pc = predictCoords();
         double[] bpc = b.predictCoords();
         
-        if (Math.hypot(pc[0] - bpc[0],pc[1] - bpc[1]) <= 1.95 * CueBall.r) {
-            return true; 
-        }            
-        
+        if (
+            (Math.hypot(pc[0] - bpc[0],pc[1] - bpc[1]) <= 1.95 * CueBall.r) &&
+            (!b.is_scored)
+        ) return true;          
         return false;
     }
     

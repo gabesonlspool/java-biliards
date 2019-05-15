@@ -24,9 +24,10 @@ public class Pocket extends GameObject {
 
     @Override
     boolean interactionCheck(CueBall b) {
-        if (Math.hypot(this.x - b.x, this.y - b.y) <= Pocket.r) {
-            return true;
-        }
+        if (
+            (Math.hypot(this.x - b.x, this.y - b.y) <= Pocket.r) &&
+            (!b.is_scored)
+        ) return true;
         return false;
     }
 

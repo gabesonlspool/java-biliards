@@ -20,6 +20,7 @@ class TopBoard extends GameObject {
         
         double [] pc = b.predictCoords();
         return true && (
+            (!b.is_scored) && 
             pc[1] <= CueBall.r + BOARD_OFFSET_Y &&
             pc[0] > Pocket.r + BOARD_OFFSET_X &&
             pc[0] < max_width - Pocket.r - BOARD_OFFSET_X &&

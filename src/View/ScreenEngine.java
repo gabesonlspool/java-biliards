@@ -96,7 +96,6 @@ public class ScreenEngine extends Canvas {
             }
         }
         cuedrawer.update();
-        
         paint(this.getGraphics());
     }
                

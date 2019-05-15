@@ -63,7 +63,7 @@ public class Client {
         turn = t;
     }
     
-    public static InetAddress establishConnection() {
+    public static InetAddress establishConnection() throws IOException {
         
         InetAddress addr = null;
         
@@ -103,26 +103,26 @@ public class Client {
             }    
             
         } catch (IOException | ClassNotFoundException ex) {
-            window.showConnectionWarning();
+            throw new IOException(ex);
         }
-        
+            
         return addr;
-        
+    
     }
     
     public static void run() {
         
         generate_preferred_port();
-        InetAddress addr = establishConnection();
-        if (addr == null) {
+        try {
+            InetAddress addr = establishConnection();
+            if (addr != null)
+                new Thread(new ServerListener(
+                    addr, PREFERRED_PORT, window
+                )).start();
+            else throw new IOException("Couldn't resolve address");
+        } catch (IOException ex) {
             window.showConnectionWarning();
-            return;
-        }
-      
-        new Thread(new ServerListener(
-            addr, PREFERRED_PORT, window
-        )).start();            
-                                     
+        }                                    
     }
     
 }

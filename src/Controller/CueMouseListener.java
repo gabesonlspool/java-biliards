@@ -7,8 +7,6 @@ package Controller;
 
 import Net.StateManager;
 import Net.Client;
-import Net.ClientCommandProcessor;
-import View.MainWindow;
 import View.ScreenEngine;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,17 +20,11 @@ public class CueMouseListener extends MouseAdapter {
     public void mouseClicked(MouseEvent me) {
         
         int st = Client.state_manager.state;
-        if (st == StateManager.AIMING) {
-            if (Client.turn) {
-                Client.state_manager.switchState(StateManager.MOVEMENT);
-                double [] v = 
-                    ((ScreenEngine) me.getSource()).getCueDrawer().getStrikeVelocity();
-               
-                Client.window.ccp.sendCommand(v[0], v[1]);
-            } else {
-                
-            }
+        if (st == StateManager.AIMING && Client.turn) {
+            Client.state_manager.switchState(StateManager.MOVEMENT);
+            double [] v = 
+                ((ScreenEngine) me.getSource()).getCueDrawer().getStrikeVelocity();
+            Client.window.ccp.sendCommand(v[0], v[1]);
         }
-    }
-    
+    }   
 }

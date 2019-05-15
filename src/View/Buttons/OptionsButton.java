@@ -6,12 +6,10 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
-import Net.Client;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.Container;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;

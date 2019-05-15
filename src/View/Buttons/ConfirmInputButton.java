@@ -8,9 +8,6 @@ package View.Buttons;
 import Controller.MouseButtonClickHandler;
 import Net.StateManager;
 import Net.Client;
-import View.GameMenu;
-import View.MainWindow;
-import View.ScreenEngine;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
@@ -20,7 +17,6 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 
 /**
  *
@@ -39,7 +35,7 @@ public class ConfirmInputButton extends GameButton {
         try {
             InetAddress addr = InetAddress.getByName(text);
         } catch (IOException ex) {
-            
+                        
             Frame parent = (Frame) this.getParent().getParent();
             Dialog d = new Dialog(parent, "Erroneous IP");
             String msg = "Erroneous IP";
@@ -66,7 +62,6 @@ public class ConfirmInputButton extends GameButton {
             gbc.gridy = 1;
             gbc.weightx = 0.5;
             d.add(new OKButton(new MouseButtonClickHandler()), gbc); 
-
             d.setModal(true);
             d.setVisible(true);
             return;

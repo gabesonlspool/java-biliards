@@ -18,9 +18,10 @@ public class Server implements Runnable {
     
     protected final static int PREFERRED_PORT = 20000;
     
-    private ArrayList<InetAddress> client_addresses;
-    private ArrayList<Integer> client_ports;
+    private ArrayList<InetAddress> clientAddresses;
+    private ArrayList<Integer> clientPorts;
     private ServerSocket serverSocket;
+    private ArrayList<Thread> gameThreads;
         
     private static ObjectOutputStream out_frame;
     private static PrintWriter out;
@@ -28,13 +29,17 @@ public class Server implements Runnable {
        
     public Server() {
         
-        client_addresses = new ArrayList<>();
-        client_ports = new ArrayList<>();
+        clientAddresses = new ArrayList<>();
+        clientPorts = new ArrayList<>();
+        
         
         try {
             serverSocket = new ServerSocket(PREFERRED_PORT);
         }
-        catch (IOException e) { e.printStackTrace();}
+        catch (IOException ex) { 
+            System.err.println(ex.getMessage());
+            System.exit(-1);
+        }
         
     }
 
@@ -58,7 +63,7 @@ public class Server implements Runnable {
                 out.flush();
                 out_frame.writeObject(clientSocket.getInetAddress());
                 out.flush();
-                if (client_addresses.size() % 2 == 0) {
+                if (clientAddresses.size() % 2 == 0) {
                     out_frame.writeBoolean(false);
                 } else {
                     out_frame.writeBoolean(true);
@@ -66,10 +71,10 @@ public class Server implements Runnable {
                 out.flush();
                                               
                 int client_port = in.readInt();                
-                client_addresses.add(clientSocket.getInetAddress());
-                client_ports.add((Integer) client_port);
+                clientAddresses.add(clientSocket.getInetAddress());
+                clientPorts.add((Integer) client_port);
                 
-                if (client_addresses.size() == 2) {
+                if (clientAddresses.size()% 2 == 0) {
                     out.println(
                         "Your game will start in a couple of seconds"
                     );
@@ -85,10 +90,12 @@ public class Server implements Runnable {
                 clientSocket.close();
 
                 
-                if (client_addresses.size() == 2) {
+                if (clientAddresses.size() % 2 == 0) {
                     new Thread(new GameServiceTask(
-                        client_addresses.get(0), client_ports.get(0),
-                        client_addresses.get(1), client_ports.get(1)
+                        clientAddresses.get(clientAddresses.size() - 2),
+                        clientPorts.get(clientPorts.size() - 2),
+                        clientAddresses.get(clientAddresses.size() - 1),
+                        clientPorts.get(clientPorts.size() - 1)
                     )).start();
                 }
                 

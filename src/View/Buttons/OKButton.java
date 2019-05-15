@@ -6,6 +6,8 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
+import java.awt.Component;
+import java.awt.Dialog;
 
 /**
  *
@@ -18,7 +20,11 @@ public class OKButton extends GameButton {
     }
     
     public void update() {
-        this.getParent().setVisible(false);
+        Component tmp = this.getParent();
+        while (!(tmp instanceof Dialog)) {
+            tmp = tmp.getParent();
+        }
+        tmp.setVisible(false);
     }
     
 }

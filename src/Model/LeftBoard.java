@@ -21,6 +21,7 @@ public class LeftBoard extends GameObject {
         
         return true && (
             pc[0] <= CueBall.r + BOARD_OFFSET_X &&
+            (!b.is_scored) && 
             pc[1] > Pocket.r + BOARD_OFFSET_Y &&
             pc[1] < max_height - Pocket.r - BOARD_OFFSET_Y
         );

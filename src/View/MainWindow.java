@@ -12,8 +12,6 @@ package View;
 
 import Controller.MouseButtonClickHandler;
 import Controller.WindowCloseHandler;
-import Net.StateManager;
-import Net.Client;
 import Net.ClientCommandProcessor;
 import Net.EngineOutputDataFrame;
 import View.Buttons.OKButton;

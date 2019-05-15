@@ -6,7 +6,6 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
-import java.awt.Component;
 
 /**
  *

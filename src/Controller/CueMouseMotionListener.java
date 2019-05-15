@@ -7,7 +7,6 @@ package Controller;
 
 import Net.StateManager;
 import Net.Client;
-import View.MainWindow;
 import View.ScreenEngine;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -27,7 +26,6 @@ public class CueMouseMotionListener implements MouseMotionListener {
     }
 
     @Override
-    public void mouseMoved(MouseEvent me) {
-        
-    };    
+    public void mouseMoved(MouseEvent me) {}
+    
 }

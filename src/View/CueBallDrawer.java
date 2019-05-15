@@ -56,7 +56,6 @@ public class CueBallDrawer extends GameObjectDrawer {
     } 
 
     @Override
-    public void update(double x, double y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void update(double x, double y) {}
+    
 }

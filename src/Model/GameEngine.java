@@ -6,12 +6,10 @@
 package Model;
 import Net.StateManager;
 import Net.BallInfo;
-import View.ScreenEngine;
 import java.util.ArrayList;
 import Net.EngineOutputDataFrame;
 import Net.GameServiceTask;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
