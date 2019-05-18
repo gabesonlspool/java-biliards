@@ -8,22 +8,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
- * @author andrey
+ * Default datatype to transfer from server to client
  */
 public class EngineOutputDataFrame implements Serializable {
     
-    public double[] masterballcoords;
-    public ArrayList<double[]> ballcoords;
+    public BallInfo master_ball_info;
+    public ArrayList<BallInfo> ball_info;
+    public int ball_num;
+    public int state;
     
-    public EngineOutputDataFrame() {
-        masterballcoords = null;
-        ballcoords = null;
+    public EngineOutputDataFrame(int n) {
+        master_ball_info = null;
+        ball_info = null;
+        ball_num = n;
     }
         
-    public void setData(double[] new_mcoords, ArrayList<double[]> new_bcords) {
-        masterballcoords = new_mcoords;
-        ballcoords = new_bcords;
+    public void setData(
+            BallInfo new_mbinfo,
+            ArrayList<BallInfo> new_binfo
+    ) {
+        master_ball_info = new_mbinfo;
+        ball_info = new_binfo;
     }
     
 }

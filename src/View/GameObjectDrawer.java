@@ -7,9 +7,7 @@ package View;
 import java.awt.Graphics;
 import javax.imageio.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 /**
  *
@@ -26,9 +24,9 @@ abstract class GameObjectDrawer {
         if (path_to_sprite != null) {
             try {
                 sprite = ImageIO.read(
-                    new File(getClass().getResource(path_to_sprite).toURI())
+                    getClass().getResourceAsStream(path_to_sprite)
                 );
-            } catch (IOException | URISyntaxException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

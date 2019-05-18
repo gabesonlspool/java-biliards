@@ -6,8 +6,8 @@
 package View;
 
 import Model.CueBall;
-import Model.GameEngine;
-import Model.StateManager;
+import Net.Client;
+import Net.StateManager;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -21,9 +21,11 @@ import java.awt.geom.AffineTransform;
  */
 public class CueDrawer extends GameObjectDrawer {
     
+    protected double[] V;
+    
     private double theta = 0.0;
     private final int PULL_RANGE = 200;
-    protected double[] V;
+    
 
     public CueDrawer() {
         super("Sprite/Cue.jpeg");
@@ -60,80 +62,78 @@ public class CueDrawer extends GameObjectDrawer {
         g2d.drawImage(sprite, trans, null);
     }   
 
+    
     public void update() {
+                       
+        Point mouse  = MouseInfo.getPointerInfo().getLocation();
+        Point master = MasterBallDrawer.getCoords();
+        double sin = ((double) (mouse.y - master.y - CueBallDrawer.r)) /
+            (Math.hypot(
+                ((double)(mouse.y - CueBallDrawer.r -  master.y)),
+                ((double)(mouse.x - CueBallDrawer.r - master.x))
+            )
+        );
         
-        if (StateManager.state == StateManager.AIMING) {
-                     
-            Point mouse  = MouseInfo.getPointerInfo().getLocation();
-            Point master = MasterBallDrawer.getCoords();
-            double sin = ((double) (mouse.y - master.y - CueBallDrawer.r)) /
-                (Math.hypot(
-                        ((double)(mouse.y - CueBallDrawer.r -  master.y)),
-                        ((double)(mouse.x - CueBallDrawer.r - master.x))
-                    )
-            );
-        
-            double cos = ((double) (mouse.x - CueBallDrawer.r - master.x)) /
-                (Math.hypot(
-                        ((double)(mouse.y - CueBallDrawer.r -  master.y)),
-                        ((double)(mouse.x - CueBallDrawer.r - master.x))
-                    )
+        double cos = ((double) (mouse.x - CueBallDrawer.r - master.x)) /
+            (Math.hypot(
+                ((double)(mouse.y - CueBallDrawer.r -  master.y)),
+                ((double)(mouse.x - CueBallDrawer.r - master.x))
+            )
+        );
+            
+            
+        double projection = 
+                (
+                    ((double) mouse.x - 
+                    Math.round (
+                        CueBallDrawer.r * (1 + Math.cos(theta)) +
+                        13 * Math.sin(theta)
+                        + master.x
+                    )) * (double) Math.cos(theta)
+                ) 
+                +
+                (
+                    ((double) mouse.y - 
+                    Math.round (
+                        CueBallDrawer.r * (1 + Math.sin(theta)) +
+                        13 * Math.cos(theta)
+                        + master.y
+                    )) * (double) Math.sin(theta)
                 );
             
-            
-            double projection = 
-                    (
-                        ((double) mouse.x - 
-                        Math.round (
-                            CueBallDrawer.r * (1 + Math.cos(theta)) +
-                            13 * Math.sin(theta)
-                            + master.x
-                        )) * (double) Math.cos(theta)
-                    ) 
-                    +
-                    (
-                        ((double) mouse.y - 
-                        Math.round (
-                            CueBallDrawer.r * (1 + Math.sin(theta)) +
-                            13 * Math.cos(theta)
-                            + master.y
-                        )) * (double) Math.sin(theta)
-                    );
-            
-            int shift = Math.min((int) projection, (int) PULL_RANGE);
+        int shift = Math.min((int) projection, (int) PULL_RANGE);
   
             
-            this.setCoords(
-                (int) Math.round (
-                    CueBallDrawer.r * (1 + Math.cos(theta)) +
-                    shift * Math.cos(theta) + 13 * Math.sin(theta)
-                ) + master.x,
-                (int) Math.round(
-                    CueBallDrawer.r * (1 + Math.sin(theta)) +
-                    shift * Math.sin(theta) - 13 * Math.cos(theta)
-                ) + master.y 
-            );
+        this.setCoords(
+            (int) Math.round (
+                CueBallDrawer.r * (1 + Math.cos(theta)) +
+                shift * Math.cos(theta) + 13 * Math.sin(theta)
+            ) + master.x,
+            (int) Math.round(
+                CueBallDrawer.r * (1 + Math.sin(theta)) +
+                shift * Math.sin(theta) - 13 * Math.cos(theta)
+            ) + master.y 
+        );
             
             
-            V[0] =
-                -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.cos(theta);
-            V[1] = 
-                -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.sin(theta);
+        V[0] =
+            -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.cos(theta);
+        V[1] = 
+            -(double) shift/PULL_RANGE * CueBall.V_MAX * Math.sin(theta);
         
-            double offset = (cos > 0) ? 0 : Math.PI;
-            if (Math.abs(cos) > 1e-5) {
-                theta = Math.atan(sin/cos) + offset;
-            } else {
-                if (sin > 0) theta = Math.PI / 2;
-                if (sin < 0) theta = Math.PI * 3 / 2;
-            }
+        double offset = (cos > 0) ? 0 : Math.PI;
+        if (Math.abs(cos) > 1e-5) {
+            theta = Math.atan(sin/cos) + offset;
+        } else {
+            if (sin > 0) theta = Math.PI / 2;
+            if (sin < 0) theta = Math.PI * 3 / 2;
+        }
         
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }           
-        } 
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }            
     }
     
     
@@ -142,8 +142,6 @@ public class CueDrawer extends GameObjectDrawer {
     }
 
     @Override
-    public void update(double x, double y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void update(double x, double y) {}
 
 }

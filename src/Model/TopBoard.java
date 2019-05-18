@@ -17,11 +17,14 @@ class TopBoard extends GameObject {
 
     @Override
     boolean interactionCheck(CueBall b) {
+        
+        double [] pc = b.predictCoords();
         return true && (
-            b.y <= CueBall.r + BOARD_OFFSET_Y &&
-            b.x > Pocket.r + BOARD_OFFSET_X &&
-            b.x < max_width - Pocket.r - BOARD_OFFSET_X &&
-            (b.x > max_width/2 + Pocket.r || b.x < max_width/2 - Pocket.r)
+            (!b.is_scored) && 
+            pc[1] <= CueBall.r + BOARD_OFFSET_Y &&
+            pc[0] > Pocket.r + BOARD_OFFSET_X &&
+            pc[0] < max_width - Pocket.r - BOARD_OFFSET_X &&
+            (pc[0] > max_width/2 + Pocket.r || pc[0] < max_width/2 - Pocket.r)
         );
     }
 

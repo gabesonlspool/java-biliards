@@ -3,33 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Net;
 
 /**
- *
- * @author andrey
+ * An API for managing shared states of model and view
  */
 public class StateManager {
     
     public static final int AIMING = 0;
     public static final int MOVEMENT = 1;
     public static final int PAUSE = 2;
-    public static StateManager instance;
     
-    public static int state;
+    public int state;
     
     public StateManager() {
         state = AIMING;
     }
-    
-    public static StateManager getInstance() {
-        if (instance == null) {
-            instance = new StateManager();
-        }
-        return instance;
-    }
-    
-    public static void switchState(int new_state) {
+      
+    public void switchState(int new_state) {
         state = new_state;
     }
     

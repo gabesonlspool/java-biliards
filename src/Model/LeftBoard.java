@@ -17,10 +17,13 @@ public class LeftBoard extends GameObject {
     
     @Override
     boolean interactionCheck(CueBall b) {
+        double [] pc = b.predictCoords();
+        
         return true && (
-            b.x <= CueBall.r + BOARD_OFFSET_X &&
-            b.y > Pocket.r + BOARD_OFFSET_Y &&
-            b.y < max_height - Pocket.r - BOARD_OFFSET_Y
+            pc[0] <= CueBall.r + BOARD_OFFSET_X &&
+            (!b.is_scored) && 
+            pc[1] > Pocket.r + BOARD_OFFSET_Y &&
+            pc[1] < max_height - Pocket.r - BOARD_OFFSET_Y
         );
     }
 

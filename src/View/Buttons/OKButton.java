@@ -6,19 +6,26 @@
 package View.Buttons;
 
 import Controller.MouseButtonClickHandler;
+import java.awt.Component;
+import java.awt.Dialog;
 
 /**
  *
  * @author andrey
  */
-public class QuitAcceptButton extends GameButton {
+public class OKButton extends GameButton {
 
-    public QuitAcceptButton(MouseButtonClickHandler l) {
+    public OKButton(MouseButtonClickHandler l) {
         super(l, "OK");
     }
     
     public void update() {
-        System.exit(0);
+        Component tmp = this.getParent();
+        while (!(tmp instanceof Dialog)) {
+            tmp = tmp.getParent();
+        }
+       
+        tmp.setVisible(false);
     }
     
 }

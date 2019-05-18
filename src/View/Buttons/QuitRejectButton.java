@@ -17,8 +17,9 @@ public class QuitRejectButton extends GameButton {
         super(l, "No");
     }
     
+    @Override
     public void update() {
-        this.getParent().setVisible(false);        
+        this.getParent().setVisible(false);
     }
     
 }

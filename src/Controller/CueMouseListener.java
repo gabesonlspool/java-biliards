@@ -5,9 +5,8 @@
  */
 package Controller;
 
-import Model.StateManager;
+import Net.StateManager;
 import Net.Client;
-import Net.ClientCommandProcessor;
 import View.ScreenEngine;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,14 +18,13 @@ public class CueMouseListener extends MouseAdapter {
     
     @Override
     public void mouseClicked(MouseEvent me) {
-        int st = StateManager.state;
-        if (st == StateManager.AIMING) {
-            StateManager.switchState(StateManager.MOVEMENT);
+        
+        int st = Client.state_manager.state;
+        if (st == StateManager.AIMING && Client.turn) {
+            Client.state_manager.switchState(StateManager.MOVEMENT);
             double [] v = 
                 ((ScreenEngine) me.getSource()).getCueDrawer().getStrikeVelocity();
-               
-            Client.window.ccp.sendCommand(ClientCommandProcessor.STRIKE);
+            Client.window.ccp.sendCommand(v[0], v[1]);
         }
-    }
-    
+    }   
 }

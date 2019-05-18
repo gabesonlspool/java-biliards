@@ -6,8 +6,6 @@
 package View;
 import Model.GameObject;
 import Model.Pocket;
-import Model.Table;
-import java.awt.Color;
 import java.awt.Graphics;
 
 /**

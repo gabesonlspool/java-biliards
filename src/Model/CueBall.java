@@ -5,20 +5,15 @@
  */
 package Model;
 
-import View.CueBallDrawer;
-
-
 public class CueBall extends GameObject {
     
     private static final double m = 0.17; // масса шара
-    private CueBallDrawer drawer;
-    private static final double f = 0.25; //коэффициент трения
-    private boolean is_scored;
-    
+    private static final double f = 0.25; //коэффициент трения    
     
     protected static int count = 0; // общее количество шаров на столе
     protected double[] V;
     protected double[] A;
+    protected boolean is_scored;
     
     public static final double r = 0.087 / 2; // радиус шара
     public static final double V_MAX = 2.0;
@@ -35,8 +30,6 @@ public class CueBall extends GameObject {
     }
         
     protected boolean Move() {
-        
-        // Если шары перестают двигаться, то движок должен остановиться
         
         if (V[0] == 0 && V[1] == 0) {
             return false;
@@ -62,6 +55,13 @@ public class CueBall extends GameObject {
         
     }
     
+    protected double[] predictCoords() {
+        double t = GameEngine.tick;
+        double pred_x = x +  V[0] * t  + A[0] / 2 * Math.pow(t, 2);
+        double pred_y = y +  V[1] * t  + A[1] / 2 * Math.pow(t, 2);
+        return new double[] {pred_x, pred_y};
+    }
+    
     public void setVelocity(double U_x, double U_y ) {
         V[0] = U_x;
         V[1] = U_y;
@@ -83,15 +83,17 @@ public class CueBall extends GameObject {
         
     }
     
-    public void addDrawer(CueBallDrawer d) {
-        drawer = d;
-    }
     
     @Override
     boolean interactionCheck(CueBall b) {
-        if (Math.hypot(x - b.x, y - b.y) <= 1.95 * CueBall.r) {
-            return true; 
-        }             
+        
+        double[] pc = predictCoords();
+        double[] bpc = b.predictCoords();
+        
+        if (
+            (Math.hypot(pc[0] - bpc[0],pc[1] - bpc[1]) <= 1.95 * CueBall.r) &&
+            (!b.is_scored)
+        ) return true;          
         return false;
     }
     

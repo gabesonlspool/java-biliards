@@ -35,18 +35,12 @@ public class Table extends GameObject {
         bb = new BottomBoard();
     }
    
-    public void addDrawer(TableDrawer d) {
-        drawer = d;
-    }
-
     @Override
     boolean interactionCheck(CueBall b) {
         return false;
     }
 
     @Override
-    void interact(CueBall b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    void interact(CueBall b) {}
     
 }

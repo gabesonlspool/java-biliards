@@ -5,7 +5,6 @@ this license header, choose License Headers in Project Properties.
  * and open the template in the editor.
  */
 package Model;
-import java.util.Vector;
 
 public class Physics {
     public static final Physics phys = new Physics();
@@ -50,10 +49,4 @@ public class Physics {
                 b2_vy_a * turn_cos + b2_vx_a * turn_sin
         );               
     } 
-       
-    Vector<Double> calculateCueInteraction(CueBall b) {
-        
-        return new Vector<Double>();
-        
-    }
 }
