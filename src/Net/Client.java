@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Net;
 
 import View.MainWindow;
@@ -14,9 +9,9 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-/**
- *
- * @author andrey
+
+/*
+ * Base net client to work with server
  */
 
 public class Client {
@@ -31,37 +26,49 @@ public class Client {
     private static ObjectInputStream in_frame;
     private static BufferedReader in;
     private static DataOutputStream out;
-    private static int PREFERRED_PORT;
+    private static int UDPPort;
+    private static int TCPPort;
     
-    public static void generate_preferred_port() {
+    
+    public static void generateTCPPort() {
         try {
             ServerSocket s = new ServerSocket(0);
-            PREFERRED_PORT = s.getLocalPort();
+            TCPPort = s.getLocalPort();
             s.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
-    public static void update() {
-        window.screng.update();
-        if (state_manager.state != window.screng.dataframe.state) {
-            if (window.screng.dataframe.state == StateManager.MOVEMENT) {
-                turn = !turn;
-            }
-            state_manager.state = window.screng.dataframe.state;   
-        };
+    
+    public static void generateUDPPort() {
+        try {
+            ServerSocket s = new ServerSocket(0);
+            UDPPort = s.getLocalPort();
+            s.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
+
+    public static void update() {
+        window.screng.update(state_manager.state, turn);
+    }
+    
+    
     public Client() {
+        
         game_type = "Classic";
         window = new MainWindow();
         state_manager = new StateManager();
+        
     }
+    
     
     public static void setTurn(boolean t) {
         turn = t;
     }
+    
     
     public static InetAddress establishConnection() throws IOException {
         
@@ -81,13 +88,13 @@ public class Client {
             
             try {
                 
-                String response = in.readLine();
-                System.out.println("Server: " + response);
-                           
+                String response = in.readLine();                           
                 addr = (InetAddress) in_frame.readObject();
-                boolean turn = in_frame.readBoolean();
+                turn = in_frame.readBoolean();
                         
-                out.writeInt(PREFERRED_PORT);
+                out.writeInt(UDPPort);
+                out.flush();
+                out.writeInt(TCPPort);
                 out.flush();
             
                 response = in.readLine();
@@ -112,13 +119,15 @@ public class Client {
     
     public static void run() {
         
-        generate_preferred_port();
+        generateTCPPort();
+        generateUDPPort();
+        
         try {
             InetAddress addr = establishConnection();
-            if (addr != null)
-                new Thread(new ServerListener(
-                    addr, PREFERRED_PORT, window
-                )).start();
+            if (addr != null) {
+                new Thread(new ServerUDPListener(addr, UDPPort)).start();
+                new Thread(new ServerTCPListener(addr, TCPPort)).start();
+            }
             else throw new IOException("Couldn't resolve address");
         } catch (IOException ex) {
             window.showConnectionWarning();

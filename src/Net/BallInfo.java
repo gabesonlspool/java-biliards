@@ -7,9 +7,8 @@ package Net;
 
 import java.io.Serializable;
 
-/**
- *
- * @author andrey
+/*
+ * Default data type describing information about the ball in the model
  */
 public class BallInfo implements Serializable {
     public double x;

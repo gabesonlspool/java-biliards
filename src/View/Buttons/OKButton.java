@@ -24,6 +24,7 @@ public class OKButton extends GameButton {
         while (!(tmp instanceof Dialog)) {
             tmp = tmp.getParent();
         }
+       
         tmp.setVisible(false);
     }
     

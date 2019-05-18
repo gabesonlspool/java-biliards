@@ -63,8 +63,7 @@ public class ScreenEngine extends Canvas {
         
         tabledrawer = new TableDrawer();
         masterdrawer = new MasterBallDrawer();                              
-        cuedrawer = new CueDrawer(this);
-        
+        cuedrawer = new CueDrawer();
         balldrawers = new ArrayList<>();    
     }
     
@@ -79,7 +78,10 @@ public class ScreenEngine extends Canvas {
         }
     }
     
-    public void update() {
+    public void update(int state, boolean turn) {
+        
+        System.out.println(turn);
+        
         masterdrawer.update(
                 dataframe.master_ball_info.x,
                 dataframe.master_ball_info.y,
@@ -95,13 +97,13 @@ public class ScreenEngine extends Canvas {
                 );   
             }
         }
-        cuedrawer.update();
-        paint(this.getGraphics());
+        
+        if (state == StateManager.AIMING && turn) cuedrawer.update();
+        paint(this.getGraphics(), state, turn);
     }
                
     
-    @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, int state, boolean turn) {
         
         Graphics bar = blank.getGraphics();
         bar.drawImage(background, 0, 0,
@@ -112,7 +114,7 @@ public class ScreenEngine extends Canvas {
             d.draw(bar);
         }
         
-        if (Client.state_manager.state == StateManager.AIMING) {
+        if (state == StateManager.AIMING && turn) {
             cuedrawer.draw(bar);
         }
         
@@ -125,4 +127,5 @@ public class ScreenEngine extends Canvas {
     public CueDrawer getCueDrawer() {
         return cuedrawer;
     }
+    
 }

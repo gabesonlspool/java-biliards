@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Net;
 
 import Model.GameEngine;
@@ -21,56 +16,77 @@ import java.net.Socket;
  */
 public class GameServiceTask implements Runnable {
     
+    /* After the connection server has info about two client-side sockets
+     * TCP-socket is designed to pass the model state or failure status
+     * to the client. Information about the model is sent via UDP in
+     * 'dataframes'. When engine is not working, information is not sent.
+    */
+    
     public EngineOutputDataFrame dataframe;
     
     private GameEngine engine;
     private ClientListener clientlistener;
+    private ModelStateObserver obs;
     private int comm_port;
     private StateManager state_manager;
     
     private DatagramSocket player1;
     private InetAddress player1address;
-    private int player1port;
+    private int player1UDPport;
+    private int player1TCPport;
 
     private DatagramSocket player2;
     private InetAddress player2address;
-    private int player2port;
+    private int player2UDPport;
+    private int player2TCPport;
     
     private ByteArrayOutputStream byte_str;
     private ObjectOutputStream frame_str;
     
     
     protected GameServiceTask(
-            InetAddress pa1, 
-            int pp1,
-            InetAddress pa2, 
-            int pp2
+            InetAddress p1a,  
+            int p1udp,
+            int p1tcp,
+            InetAddress p2a, 
+            int p2udp,
+            int p2tcp
     ) {
-        
+                
         state_manager = new StateManager();
         engine = new GameEngine(this, state_manager, "DiamondPool");
                      
-        player1port = pp1;
-        player1address = pa1;
-        player2port = pp2;
-        player2address = pa2;
+        player1UDPport = p1udp;
+        player1TCPport = p1tcp;
+        player1address = p1a;
+        
+        player2UDPport = p2udp;
+        player2TCPport = p2tcp;
+        player2address = p2a;
         
         try {
             ServerSocket s = new ServerSocket(0);
             comm_port = s.getLocalPort();
-            
             s.close();
+            clientlistener = new ClientListener(
+                engine, state_manager, comm_port
+            );
+            obs = new ModelStateObserver(
+                    state_manager, p1a, p1tcp, p2a, p2tcp
+            );
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         
-        clientlistener = new ClientListener(
-                engine, state_manager, comm_port
-        );
                    
     }
     
     private void syncDataframeAndPort(int port, InetAddress addr) {
+        
+        /* Synchronization is requested for client to get information about 
+         * where to send it's commands, and what is the ball configuration,
+         * in order to initialize it's ball drawers.
+        */
                     
         try {
             
@@ -81,6 +97,7 @@ public class GameServiceTask implements Runnable {
             );
             
             try {
+                
                 dataframe = engine.getDataFrame();
                 out.writeObject(dataframe);
                 out.flush();
@@ -97,50 +114,56 @@ public class GameServiceTask implements Runnable {
         }
     }
     
-    
+    private void sendModelData() {
+        
+        try {
+            
+            byte_str = new ByteArrayOutputStream();
+            frame_str = new ObjectOutputStream(byte_str);
+            frame_str.writeObject(dataframe);
+            byte[] data = byte_str.toByteArray();
+            frame_str.close();
+            byte_str.close();
+                
+            DatagramSocket player1 = new DatagramSocket();
+            DatagramPacket packet1 = new DatagramPacket(
+                data, data.length,
+                player1address, player1UDPport
+            );
+            
+            player1.send(packet1);
+            player1.close();
+                    
+            DatagramSocket player2 = new DatagramSocket();
+            DatagramPacket packet2 = new DatagramPacket(
+                data, data.length,
+                player2address, player2UDPport
+            );
+                    
+            player2.send(packet2);
+            player2.close();
+                  
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
     @Override
     public void run() {
         
-        syncDataframeAndPort(player1port, player1address);
-        syncDataframeAndPort(player2port, player2address);
+        syncDataframeAndPort(player1TCPport, player1address);
+        syncDataframeAndPort(player2TCPport, player2address);
         
         new Thread(clientlistener).start();
         new Thread(engine).start();
+        new Thread(obs).start();
         
         while (true) {
             
             long startTime = System.currentTimeMillis();
-                                     
-            try {
-                
-                byte_str = new ByteArrayOutputStream();
-                frame_str = new ObjectOutputStream(byte_str);   
-                frame_str.writeObject(dataframe);
-                byte[] data = byte_str.toByteArray();
-                frame_str.close();
-                byte_str.close();
-                
-                DatagramSocket player1 = new DatagramSocket();
-                player1.connect(player1address, player1port);
-                DatagramPacket packet1 = new DatagramPacket(
-                    data, data.length,
-                    player1address, player1port
-                );
-                player1.send(packet1);
-                player1.close();
-                    
-                DatagramSocket player2 = new DatagramSocket();
-                player2.connect(player2address, player2port);
-                DatagramPacket packet2 = new DatagramPacket(
-                    data, data.length,
-                    player2address, player2port
-                );
-                player2.send(packet2);
-                player2.close();
-                                    
-            } catch (IOException e) {
-                e.printStackTrace();
+            
+            if (state_manager.state == StateManager.MOVEMENT) {
+                sendModelData();
             }
         
             long estimatedTime = System.currentTimeMillis() - startTime;            

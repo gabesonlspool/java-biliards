@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
- * @author andrey
+ * Default datatype to transfer from server to client
  */
 public class EngineOutputDataFrame implements Serializable {
     
@@ -22,14 +21,12 @@ public class EngineOutputDataFrame implements Serializable {
         master_ball_info = null;
         ball_info = null;
         ball_num = n;
-        state = StateManager.AIMING;
     }
         
     public void setData(
-            int st, BallInfo new_mbinfo,
+            BallInfo new_mbinfo,
             ArrayList<BallInfo> new_binfo
     ) {
-        state = st;
         master_ball_info = new_mbinfo;
         ball_info = new_binfo;
     }

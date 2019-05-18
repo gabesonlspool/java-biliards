@@ -73,7 +73,7 @@ public class OptionsButton extends GameButton {
         tmp_button_container.setBounds(
             0, f.getHeight() * 3/4, f.getWidth(), f.getHeight() * 1/4
         );
-        tmp_button_container.setLayout(new FlowLayout());
+        tmp_button_container.setLayout(new FlowLayout(FlowLayout.RIGHT));
         tmp_button_container.add(
             new SaveSettingsButton(new MouseButtonClickHandler())
         );

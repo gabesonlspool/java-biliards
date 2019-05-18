@@ -8,8 +8,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 /**
+ * A class, designed to parse and send commands from client to server
  *
- * @author andrey
  */
 public class ClientCommandProcessor {
     
@@ -20,6 +20,7 @@ public class ClientCommandProcessor {
     private static DataOutputStream out; 
           
     public ClientCommandProcessor() {}
+    
     
     protected void setServerParams(InetAddress addr, int p) {
         comm_address = addr;

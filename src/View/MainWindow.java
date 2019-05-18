@@ -52,7 +52,8 @@ public class MainWindow {
         window.add(screng);
         
         window.setFocusable(true);
-        window.setVisible(true);       
+        window.setVisible(true);    
+        
     }
     
     public void setDataFrame(EngineOutputDataFrame df) {

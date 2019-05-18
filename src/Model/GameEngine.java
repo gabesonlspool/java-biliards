@@ -32,8 +32,7 @@ public class GameEngine implements Runnable {
     private ArrayList<CueBall> balls;
     private MasterBall master; 
     private EngineOutputDataFrame df;
-    private final String config_file_path = 
-            "/home/andrey/NetBeansProjects/Billiards/src/Model/";
+    private final String config_file_path = "src/Model/";
        
     public GameEngine(GameServiceTask tsk, StateManager mng, String type) {
         
@@ -41,6 +40,8 @@ public class GameEngine implements Runnable {
         game_service_task = tsk;
         t = new Table();
         state_manager = mng;
+        
+        // Ball layout is initialized through .properties files
         
         try {
             
@@ -73,7 +74,6 @@ public class GameEngine implements Runnable {
             
             df = new EngineOutputDataFrame(ball_number);
             df.setData(
-                StateManager.AIMING,
                 new BallInfo(master.x, master.y, false),
                 ball_info
             );         
@@ -138,7 +138,6 @@ public class GameEngine implements Runnable {
             
             
                 game_service_task.dataframe.setData(
-                    state_manager.state,
                     new BallInfo(master.x, master.y, false),
                     new_coords
                 );

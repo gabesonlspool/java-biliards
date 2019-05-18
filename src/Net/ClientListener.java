@@ -12,8 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- *
- * @author andrey
+ * Class for acquiring events from client on the server side
  */
 class ClientListener implements Runnable {
     

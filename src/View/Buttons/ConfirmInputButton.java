@@ -28,6 +28,7 @@ public class ConfirmInputButton extends GameButton {
         super(l, "OK");
     }
     
+    @Override
     public void update() {
         
         String text = ((TextField) this.getParent().getComponent(1)).getText();

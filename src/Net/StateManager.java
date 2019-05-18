@@ -6,8 +6,7 @@
 package Net;
 
 /**
- *
- * @author andrey
+ * An API for managing shared states of model and view
  */
 public class StateManager {
     
