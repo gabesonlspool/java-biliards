@@ -19,11 +19,7 @@ import java.util.Properties;
  */
 
 public class GameEngine implements Runnable {
-    
-    public static final int AIMING = 0;
-    public static final int MOVEMENT = 1;
-    public static final int PAUSE = 2;
-             
+                 
     protected static final double tick = 0.02;
     
     private GameServiceTask game_service_task;
