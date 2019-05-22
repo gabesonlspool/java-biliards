@@ -12,7 +12,7 @@ package View;
 
 import Controller.MouseButtonClickHandler;
 import Controller.WindowCloseHandler;
-import Model.EngineOutputDataFrame;
+import Content.EngineOutputDataFrame;
 import View.Buttons.OKButton;
 import java.awt.Dialog;
 import java.awt.Dimension;

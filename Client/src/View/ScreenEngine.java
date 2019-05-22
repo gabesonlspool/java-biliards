@@ -3,7 +3,7 @@ package View;
 import Controller.CueMouseListener;
 import Controller.CueMouseMotionListener;
 import Model.StateManager;
-import Model.EngineOutputDataFrame;
+import Content.EngineOutputDataFrame;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

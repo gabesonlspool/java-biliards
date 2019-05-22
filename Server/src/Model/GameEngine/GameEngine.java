@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package Model.GameEngine;
-import Model.Server.EngineOutputDataFrame;
+import Content.BallInfo;
+import Content.EngineOutputDataFrame;
 import Model.Server.GameServiceTask;
 import Model.Server.StateManager;
 import java.util.ArrayList;

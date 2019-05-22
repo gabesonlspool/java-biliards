@@ -1,5 +1,6 @@
 package Model;
 
+import Content.EngineOutputDataFrame;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
